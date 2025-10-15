@@ -21,7 +21,7 @@ export const routes: Routes = [
       },
        {
         path: 'recetas',
-        loadComponent: () => import('./tabs/home/home.page').then(m => m.HomePage)
+        loadComponent: () => import('./tabs/recetas/recetas.page').then(m => m.recetasPage)
       },
       {
         path: 'health',
