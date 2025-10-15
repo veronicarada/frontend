@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Recetas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- FORMULARIO -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ id_receta ? 'Editar receta' : 'Nueva receta' }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form (ngSubmit)="guardar()">
+        <ion-item>
+          <ion-label position="stacked">Nombre *</ion-label>
+          <ion-input [(ngModel)]="nombre" name="nombre" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Instrucciones *</ion-label>
+          <ion-textarea [(ngModel)]="instrucciones" name="instrucciones" rows="4" required></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Tiempo (min)</ion-label>
+          <ion-input type="number" [(ngModel)]="tiempo_preparacion_min" name="tiempo_preparacion_min"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Dificultad</ion-label>
+          <ion-select [(ngModel)]="dificultad" name="dificultad" interface="popover" placeholder="Seleccionar">
+            <ion-select-option value="Fácil">Fácil</ion-select-option>
+            <ion-select-option value="Media">Media</ion-select-option>
+            <ion-select-option value="Difícil">Difícil</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Si manejás el user id, mostrás/ocultás -->
+        <!--
+        <ion-item>
+          <ion-label position="stacked">ID Usuario</ion-label>
+          <ion-input [(ngModel)]="id_usuario" name="id_usuario"></ion-input>
+        </ion-item>
+        -->
+
+        <div class="btns">
+          <ion-button type="submit" expand="block" color="primary">
+            {{ id_receta ? 'Actualizar' : 'Crear' }}
+          </ion-button>
+          <ion-button type="button" expand="block" color="medium" (click)="limpiarForm()"
+            *ngIf="id_receta">Cancelar</ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- BUSCADOR -->
+  <ion-item>
+    <ion-icon name="search" slot="start"></ion-icon>
+    <ion-input [(ngModel)]="filtro" placeholder="Buscar por nombre, instrucciones o dificultad"></ion-input>
+  </ion-item>
+
+  <!-- LISTA -->
+  <ion-list>
+    <ion-item *ngFor="let r of recetasFiltradas">
+      <ion-label>
+        <h2>{{ r.nombre }}</h2>
+        <p>
+          <strong>Dificultad:</strong> {{ r.dificultad || '—' }} &nbsp;|&nbsp;
+          <strong>Tiempo:</strong> {{ r.tiempo_preparacion_min || '—' }} min
+        </p>
+        <p class="instrucciones">{{ r.instrucciones }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="tertiary" (click)="editar(r)">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button slot="end" fill="clear" color="danger" (click)="eliminar(r)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-note *ngIf="!recetas?.length" color="medium">No hay recetas cargadas.</ion-note>
+</ion-content>

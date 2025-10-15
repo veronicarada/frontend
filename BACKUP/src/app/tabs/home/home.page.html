@@ -1,0 +1,91 @@
+<ion-header translucent="true">
+  <ion-toolbar class="hdr">
+    <ion-title>¡Hola, {{ usuario }}!</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear">
+        <ion-icon name="person-circle" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" class="ion-padding page">
+
+  <!-- Accesos rápidos -->
+  <div class="quick-grid">
+    <button class="quick-btn" (click)="go('recetas')">
+      <ion-icon name="checkmark-done-outline"></ion-icon>
+      <span>recetas</span>
+    </button>
+
+    <button class="quick-btn" (click)="go('ingredientes')">
+      <ion-icon name="list-outline"></ion-icon>
+      <span>ingredientes</span>
+    </button>
+
+    <button class="quick-btn" (click)="go('gastos')">
+      <ion-icon name="wallet-outline"></ion-icon>
+      <span>gastos</span>
+    </button>
+
+    <button class="quick-btn" (click)="go('plus')">
+      <ion-icon name="sparkles-outline"></ion-icon>
+      <span>plus</span>
+    </button>
+  </div>
+
+  <!-- Tus recetas sugeridas -->
+  <h2 class="section-title">Tus recetas sugeridas</h2>
+  <div class="cards-scroll">
+    <div class="receta-card" *ngFor="let r of recetas">
+      <div class="receta-img" [style.backgroundImage]="'url('+r.imagen+')'"></div>
+      <div class="receta-body">
+        <div class="receta-title">{{ r.titulo }}</div>
+        <div class="receta-meta" *ngIf="r.tiempoMin">
+          <ion-icon name="time-outline"></ion-icon>
+          <span>{{ r.tiempoMin }} min</span>
+        </div>
+      </div>
+      <button class="fav-btn" [class.on]="r.favorito" (click)="toggleFav(r)">
+        <ion-icon name="heart"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Ingredientes disponibles -->
+  <div class="ing-row">
+    <h2 class="section-title">Tus ingredientes disponibles</h2>
+    <div class="chips">
+      <ion-chip *ngFor="let i of ingredientes" class="chip">
+        <ion-label>{{ i.nombre }}</ion-label>
+      </ion-chip>
+      <!-- ejemplo “Huevo” destacado a la derecha como en el mock -->
+      <span class="chip-alt">Huevo</span>
+    </div>
+  </div>
+
+  <!-- Gastos semanales -->
+  <h2 class="section-title">Gastos en alimentación semanal</h2>
+  <div class="gastos-grid">
+    <div class="saldo">
+      <div class="saldo-title">juan tenes</div>
+      <div class="saldo-valor">${{ presupuestoSemana }}</div>
+    </div>
+
+    <div class="donut">
+      <div
+        class="ring"
+        [style.background]="
+          'conic-gradient(var(--mealgo-accent) ' + (pctGastado*360) + 'deg, #ffe8c7 0)'
+        ">
+      </div>
+      <div class="donut-center">
+        <div class="num">${{ restanteSemana }}</div>
+        <div class="lbl">restante</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom spacing -->
+  <div style="height: 24px;"></div>
+</ion-content>

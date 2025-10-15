@@ -1,0 +1,35 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home" [routerLink]="['/tabs/home']">
+      <img src="assets/img/home-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
+    </ion-tab-button>
+
+<ion-tab-button tab="recetas" [routerLink]="['/tabs/recetas']">
+       <img src="assets/img/home-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
+    </ion-tab-button>
+     <ion-tab-button tab="recetas" href="/tabs/recetas">
+      <ion-icon name="restaurant"></ion-icon>
+      <ion-label>Recetas</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="health" [routerLink]="['/tabs/health']">
+      <img src="assets/img/heart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" />
+    </ion-tab-button>
+
+    <ion-tab-button tab="capture" [routerLink]="['/tabs/capture']">
+      <img src="assets/img/camera-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
+    </ion-tab-button>
+
+    <ion-tab-button tab="stats" [routerLink]="['/tabs/stats']">
+      <img src="assets/img/bar-chart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
+    </ion-tab-button>
+ 
+    <ion-tab-button (click)="logoutDirect()" tab="profile">
+      <img src="assets/img/log-out-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
+    </ion-tab-button>
+    
+  </ion-tab-bar>
+</ion-tabs>
+
+
+

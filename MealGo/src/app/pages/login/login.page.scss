@@ -1,0 +1,112 @@
+.login-content {
+  --background: url('https://sdmntprwestus2.oaiusercontent.com/files/00000000-41b4-61f8-8b32-f57f051d3500/raw?se=2025-10-07T15%3A49%3A37Z&sp=r&sv=2024-08-04&sr=b&scid=d5c2632e-7c6a-5c7a-ae9a-6fe15ea51764&skoid=f28c0102-4d9d-4950-baf0-4a8e5f6cf9d4&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-10-07T06%3A00%3A45Z&ske=2025-10-08T06%3A00%3A45Z&sks=b&skv=2024-08-04&sig=6/hC4SH84h0QKl1wrLuWji9TPRLkovLmkVVRwYwcpe8%3D') no-repeat center center / cover;
+  position: relative;
+}
+
+.background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;   // asegura el centrado vertical
+  position: relative;
+  z-index: 2;
+}
+
+.login-card {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.15);  /* translúcido */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  color: #fff; /* texto en blanco */
+}
+
+.login-icon {
+  font-size: 4rem;
+  color: #ffc117;
+  margin-bottom: 0.5rem;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  color: #fff; /* blanco */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: rgba(255,255,255,0.85);
+}
+
+/* ===== Inputs ===== */
+.login-item {
+  margin-bottom: 1rem;
+  --background: transparent;
+  --inner-background: transparent;
+  --highlight-color-focused: #3bb78f;
+  --color: #fff;
+  --placeholder-color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+}
+
+.login-item ion-label {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.login-item ion-input {
+  color: #fff;
+}
+
+/* ===== Botón ===== */
+.login-button {
+  margin-top: 1rem;
+  --background: linear-gradient(135deg, #ffc941, #ff6f07);
+  --border-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(240, 227, 142, 0.4);
+}
+
+/* ===== Footer ===== */
+.footer-text {
+  font-size: 0.9rem;
+  margin-top: 1.2rem;
+  color: #fff;
+
+  a {
+    color: #feffe6;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
