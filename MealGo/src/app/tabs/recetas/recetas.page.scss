@@ -1,4 +1,3 @@
-/* Fuente (opcional): si tenés BBH Sans Hegarty, declárala en global.scss y usá la var aquí */
 :host {
   --mg-coral: #FF7E5F;
   --mg-peach: #FEB47B;
@@ -55,7 +54,7 @@ ion-card-title {
 
 /* Inputs */
 .mg-input {
-  --background: #fff;
+  --background: #fdfcfc;
   border-radius: 14px;
   margin-bottom: 14px;
   box-shadow: 0 1px 4px rgba(0,0,0,.06);
@@ -104,10 +103,10 @@ ion-input, ion-textarea, ion-select {
   border-radius: 18px;
   margin: 12px 6px;
   box-shadow: 0 10px 24px rgba(0,0,0,.08);
-  padding: 8px 6px; /* para dar aire al interior */
+  padding: 8px 6px;
 }
 
-/* Cabecera de receta: título + acciones */
+/* Cabecera de receta */
 .mg-head {
   display: flex;
   align-items: center;
@@ -137,9 +136,7 @@ ion-input, ion-textarea, ion-select {
   align-items: center;
   justify-content: center;
 }
-.mg-icon-btn.danger {
-  --background: #ffecec;
-}
+.mg-icon-btn.danger { --background: #ffe9e9; }
 
 /* Meta (chips) */
 .mg-meta {
@@ -157,11 +154,11 @@ ion-input, ion-textarea, ion-select {
   --background: rgba(96,200,120,.12);
   --color: #2a7a49;
 }
-.mg-chip.easy { --background: rgba(96,200,120,.14); --color: #2a7a49; }             /* verde */
-.mg-chip.med  { --background: rgba(254,180,123,.18); --color: #A45A00; }            /* naranja */
-.mg-chip.hard { --background: rgba(255, 0, 0, 0.18); --color: #d41010; }     /* rojo/coral */
+.mg-chip.easy { --background: rgba(96,200,120,.14); --color: #2a7a49; }   /* verde */
+.mg-chip.med  { --background: rgba(254,180,123,.18); --color: #A45A00; }  /* naranja */
+.mg-chip.hard { --background: rgba(255,0,0,.18); --color: #d41010; }      /* rojo */
 
-/* Badge tiempo */
+/* Badge */
 .mg-badge {
   display: inline-flex;
   align-items: center;
@@ -174,7 +171,13 @@ ion-input, ion-textarea, ion-select {
   background: rgba(254,180,123,.22);
 }
 
-/* Descripción / instrucciones */
+/* Etiquetas e ingredientes */
+.mg-tags { display:flex; flex-wrap:wrap; gap:6px; margin: 6px 2px; }
+
+/* Calificar */
+.mg-rate { margin: blue; }
+
+/* Descripción */
 .mg-desc {
   margin: 6px 2px 4px;
   color: #3b3b3b;
@@ -192,40 +195,19 @@ ion-note {
   color: var(--mg-muted);
 }
 
-/* Transiciones suaves */
+/* Transiciones */
 ion-item, ion-card, ion-button { transition: all .18s ease; }
 .mg-recipe:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,.10); }
 
-/* Lupita en el buscador */
+/* Lupita buscador */
 .mg-search ion-icon[slot="start"] {
   color: var(--mg-muted);
-  font-size: 20px;          /* tamaño visible */
+  font-size: 20px;
   margin-right: 4px;
 }
 
-/* Fuerza color de los iconos dentro de los botones redondos */
-.mg-icon-btn {
-  --color: var(--mg-coral);  /* color del ícono */
-  color: var(--mg-coral);    /* fallback */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  border-radius: 999px;
-}
-.mg-icon-btn ion-icon {
-  font-size: 18px;           /* tamaño del lápiz */
-}
-
-/* Versión danger (borrar) */
-.mg-icon-btn.danger {
-  --color: #d64545;          /* rojo suave */
-  color: #d64545;
-  --background: #ffecec;
-}
-.mg-icon-btn.danger ion-icon {
-  font-size: 18px;
-}
-
-
+/* Fuerza color iconos en botones */
+.mg-icon-btn { --color: var(--mg-coral); color: var(--mg-coral); }
+.mg-icon-btn ion-icon { font-size: 18px; }
+.mg-icon-btn.danger { --color: #d64545; color: #d64545; --background: #ffecec; }
+.mg-icon-btn.danger ion-icon { font-size: 18px; }

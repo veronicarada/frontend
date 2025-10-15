@@ -6,7 +6,6 @@ export const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-   { path: '', redirectTo: 'recetas', pathMatch: 'full' },
   {
     path: 'login',
     loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage)
@@ -17,11 +16,15 @@ export const routes: Routes = [
     children: [
       {
         path: 'home',
-        loadComponent: () => import('./tabs/home/home.page').then(m => m.HomePage)
+        loadComponent: () => import('./tabs/home/home.page').then(m => m.HomeLandingPage)
       },
        {
         path: 'recetas',
-        loadComponent: () => import('./tabs/recetas/recetas.page').then(m => m.recetasPage)
+        loadComponent: () => import('./tabs/recetas/recetas.page').then(m => m.RecetasPage)
+      },
+      {
+        path: 'plan',
+        loadComponent: () => import('./tabs/plan/plan.page').then(m => m.PlanPage)
       },
       {
         path: 'health',
@@ -44,7 +47,7 @@ export const routes: Routes = [
         redirectTo: 'home',
         pathMatch: 'full'
       }
-      
     ]
-  }
+  }, 
+   { path: '**', redirectTo: 'login' }
 ];
