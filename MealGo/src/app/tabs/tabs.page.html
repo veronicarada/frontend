@@ -1,38 +1,60 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="despensa" [routerLink]="['/tabs/despensa']">
-    <ion-icon name="basket-outline"></ion-icon>
-  <ion-label>Despensa</ion-label>
-    </ion-tab-button>
 
-     <ion-tab-button tab="recetas" href="/tabs/recetas">
-      <ion-icon name="restaurant-outline"></ion-icon>
-      <ion-label>Recetas</ion-label>
-    </ion-tab-button>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Tips Nutricionales</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-      <ion-tab-button tab="plan" href="/tabs/plan">
-      <ion-icon name="calendar"></ion-icon>
-      <ion-label>Plan</ion-label>
-    </ion-tab-button>
+<ion-content class="ion-padding">
 
-    <ion-tab-button tab="health" [routerLink]="['/tabs/health']">
-      <img src="assets/img/heart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
+  <!-- 🧠 FORMULARIO PARA AGREGAR NUEVOS TIPS -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar nuevo tip</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Título</ion-label>
+        <ion-input
+          [(ngModel)]="newTip.titulo"
+          placeholder="Ej: Comé más frutas">
+        </ion-input>
+      </ion-item>
 
-    <ion-tab-button tab="capture" [routerLink]="['/tabs/capture']">
-      <img src="assets/img/camera-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
+      <ion-item>
+        <ion-label position="stacked">Descripción</ion-label>
+        <ion-textarea
+          [(ngModel)]="newTip.descripcion"
+          placeholder="Ej: Las frutas aportan vitaminas esenciales.">
+        </ion-textarea>
+      </ion-item>
 
-    <ion-tab-button tab="stats" [routerLink]="['/tabs/stats']">
-      <img src="assets/img/bar-chart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
- 
-    <ion-tab-button (click)="logoutDirect()" tab="profile">
-      <img src="assets/img/log-out-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
-    
-  </ion-tab-bar>
-</ion-tabs>
+      <ion-item>
+        <ion-label position="stacked">Categoría</ion-label>
+        <ion-input
+          [(ngModel)]="newTip.categoria"
+          placeholder="Ej: Salud, Energía, Deporte">
+        </ion-input>
+      </ion-item>
 
+      <ion-button expand="block" color="success" (click)="addTip()">
+        Guardar Tip
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- ⏳ Spinner de carga -->
+  <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
 
+  <!-- 📋 LISTA DE TIPS -->
+  <ion-card *ngFor="let tip of tips">
+    <ion-card-header>
+      <ion-card-title>{{ tip.titulo }}</ion-card-title>
+      <ion-card-subtitle>{{ tip.categoria }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{ tip.descripcion }}
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

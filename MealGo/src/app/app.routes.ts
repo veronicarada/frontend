@@ -27,6 +27,10 @@ export const routes: Routes = [
         loadComponent: () => import('./tabs/plan/plan.page').then(m => m.PlanPage)
       },
       {
+        path: 'tips',
+        loadComponent: () => import('./tabs/tips/tips.page').then(m => m.TipsPage)
+      },
+      {
         path: 'health',
         loadComponent: () => import('./tabs/health/health.page').then(m => m.HealthPage)
       },
