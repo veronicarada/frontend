@@ -1,34 +1,104 @@
-ion-tab-bar {
+/* ======= Fondo degradé y tipografías ======= */
+.mg-bg {
+  --background: linear-gradient(180deg, #ffe6d6 0%, #ffeede 100%);
+}
+
+.mg-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  ion-title { font-weight: 800; }
+}
+
+/* ======= Card suave y redondeado ======= */
+.mg-card {
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(0,0,0,.08);
+  background: #fffaf5;
+  --inner-padding-end: 16px;
+  --inner-padding-start: 16px;
+
+  ion-card-title {
+    font-weight: 800;
+    font-size: 1.6rem;
+    color:#f88a61;
+  }
+}
+
+/* ======= Layout de campos ======= */
+.mg-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+
+  &.two { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .mg-grid { grid-template-columns: repeat(3, 1fr); }
+  .mg-grid.two { grid-template-columns: repeat(2, 1fr); }
+}
+
+.mg-field {
   --background: #fff;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
-  height: 65px;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
 }
 
-/* Color general de los iconos/textos */
-ion-tab-button {
-  --color: #7c7c7c; /* gris base */
-  --color-selected: #FF7E5F; /* coral MealGo */
-  font-weight: 600;
+/* ======= Botón CTA naranja ======= */
+.mg-cta {
+  --background: linear-gradient(180deg,#ff905e 0%, #ff7a4a 100%);
+  --background-activated: #ff6d3b;
+  --border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-top: 12px;
 }
 
-/* Hace que los iconos sean un poco más grandes */
-ion-icon {
-  font-size: 22px;
-}
-
-/* --- Estilo especial para el tab de Recetas --- */
-ion-tab-button[tab="recetas"] {
-  --color: #333333; /* gris oscuro cuando NO está activo */
-}
-
-/* Cuando está seleccionado, lo hacemos más oscuro y fuerte */
-ion-tab-button[tab="recetas"].tab-selected {
-  --color-selected: #d6451f; /* coral oscuro */
-  color: #d6451f !important;
+/* ======= Cancelar (tono medio) ======= */
+.mg-cancel {
+  --border-radius: 14px;
   font-weight: 700;
 }
 
-ion-tab-button[tab="recetas"].tab-selected ion-icon {
-  color: #d6451f !important;
-  transform: scale(1.05);
+/* ======= Lista de planes ======= */
+.mg-list {
+  background: transparent;
+
+  ion-list-header {
+    --background: transparent;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+}
+
+.mg-list-item {
+  --background: #fff;
+  border-radius: 14px;
+  margin: 6px 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,.05);
+
+  h2 { font-weight: 800; margin-bottom: 2px; }
+  p  { opacity: .7; }
+}
+
+/* ======= Chips de acciones ======= */
+.mg-actions {
+  display: flex; gap: 8px;
+}
+
+.mg-chip {
+  --border-radius: 10px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  font-weight: 800;
+  letter-spacing: .3px;
+
+  &.view   { --background: #e8f5ed; color: #0f7b3f; }
+  &.outline{ --color: #ff7a4a; --border-color: #ff7a4a; }
+  &.danger { color: #d93025; }
+}
+
+/* Sublista del detalle */
+.mg-sublist .mg-list-item {
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
 }

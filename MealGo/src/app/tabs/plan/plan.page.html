@@ -1,37 +1,113 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home" [routerLink]="['/tabs/home']">
-      <img src="assets/img/home-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
+<ion-header>
+  <ion-toolbar color="light" class="mg-toolbar">
+    <ion-title>Plan de comidas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear">
+        <ion-icon name="heart-outline" slot="start"></ion-icon>
+        Ver favoritos
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-     <ion-tab-button tab="recetas" href="/tabs/recetas">
-      <ion-icon name="restaurant-outline"></ion-icon>
-      <ion-label>Recetas</ion-label>
-    </ion-tab-button>
+<ion-content class="ion-padding mg-bg">
 
-      <ion-tab-button tab="plan" href="/tabs/plan">
-      <ion-icon name="calendar"></ion-icon>
-      <ion-label>Plan</ion-label>
-    </ion-tab-button>
+  <!-- ====== Crear / Editar Plan ====== -->
+  <ion-card class="mg-card">
+    <ion-card-header>
+      <ion-card-title>{{ editPlanId ? 'Editar plan' : 'Nuevo plan' }}</ion-card-title>
+    </ion-card-header>
 
-    <ion-tab-button tab="health" [routerLink]="['/tabs/health']">
-      <img src="assets/img/heart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
+    <ion-card-content>
+      <div class="mg-grid">
+        <ion-item class="mg-field" lines="full">
+          <ion-label position="stacked">Título</ion-label>
+          <ion-input [(ngModel)]="planTitulo" placeholder="Ej: Semana saludable"></ion-input>
+        </ion-item>
 
-    <ion-tab-button tab="capture" [routerLink]="['/tabs/capture']">
-      <img src="assets/img/camera-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
+        <ion-item class="mg-field" lines="full">
+          <ion-label position="stacked">Fecha inicio</ion-label>
+          <ion-datetime presentation="date" [(ngModel)]="planFechaInicio"></ion-datetime>
+        </ion-item>
 
-    <ion-tab-button tab="stats" [routerLink]="['/tabs/stats']">
-      <img src="assets/img/bar-chart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
- 
-    <ion-tab-button (click)="logoutDirect()" tab="profile">
-      <img src="assets/img/log-out-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
-    
-  </ion-tab-bar>
-</ion-tabs>
+        <ion-item class="mg-field" lines="full">
+          <ion-label position="stacked">Fecha fin</ion-label>
+          <ion-datetime presentation="date" [(ngModel)]="planFechaFin"></ion-datetime>
+        </ion-item>
+      </div>
 
+      <ion-button class="mg-cta" expand="block" (click)="guardarPlan()">
+        {{ editPlanId ? 'Guardar cambios' : 'Crear plan' }}
+      </ion-button>
 
+      <ion-button class="mg-cancel" expand="block" fill="clear" color="medium" *ngIf="editPlanId"
+                  (click)="limpiarFormPlan()">
+        Cancelar edición
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- ====== Lista de Planes ====== -->
+  <ion-list class="mg-list">
+    <ion-list-header>
+      <ion-label>Mis planes</ion-label>
+    </ion-list-header>
+
+    <ion-item class="mg-list-item" lines="full" *ngFor="let p of planes">
+      <ion-label>
+        <h2>{{ p.titulo }}</h2>
+        <p>{{ p.fecha_inicio | date:'MMM d, y' }} — {{ p.fecha_fin | date:'MMM d, y' }}</p>
+      </ion-label>
+
+      <div class="mg-actions" slot="end">
+        <ion-button size="small" class="mg-chip view" (click)="verDetalle(p)">VER</ion-button>
+        <ion-button size="small" class="mg-chip outline" fill="outline" (click)="editarPlan(p)">EDITAR</ion-button>
+        <ion-button size="small" class="mg-chip danger" color="danger" fill="clear"
+                    (click)="eliminarPlan(p)">ELIMINAR</ion-button>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <!-- ====== Detalle del Plan (plan_receta) ====== -->
+  <ion-card class="mg-card" *ngIf="selectedPlan">
+    <ion-card-header>
+      <ion-card-title>Plan: {{ selectedPlan.titulo }}</ion-card-title>
+      <ion-card-subtitle>Recetas incluidas</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="mg-grid two">
+        <ion-item class="mg-field" lines="full">
+          <ion-label position="stacked">Receta</ion-label>
+          <ion-select interface="popover" placeholder="Elegí receta" [(ngModel)]="nuevaRecetaId">
+            <ion-select-option *ngFor="let r of recetas" [value]="r.id_receta">
+              {{ r.nombre }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="mg-field" lines="full">
+          <ion-label position="stacked">Tipo</ion-label>
+          <ion-select interface="popover" [(ngModel)]="nuevaRecetaTipo">
+            <ion-select-option *ngFor="let t of tiposComida" [value]="t">{{ t }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <ion-button class="mg-cta" expand="block" (click)="agregarRecetaAlPlan()">Agregar al plan</ion-button>
+
+      <ion-list class="mg-sublist ion-margin-top">
+        <ion-item class="mg-list-item" lines="full" *ngFor="let it of recetasDelPlan">
+          <ion-label>
+            <h3>{{ it.nombre || it.id_receta }}</h3>
+            <p>{{ it.tipo }}</p>
+          </ion-label>
+          <ion-button class="mg-chip danger" color="danger" fill="clear" (click)="quitarRecetaDelPlan(it)">
+            Quitar
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

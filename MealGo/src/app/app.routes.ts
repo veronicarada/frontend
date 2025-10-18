@@ -15,8 +15,8 @@ export const routes: Routes = [
     loadComponent: () => import('./tabs/tabs.page').then(m => m.TabsPage),
     children: [
       {
-        path: 'home',
-        loadComponent: () => import('./tabs/home/home.page').then(m => m.HomeLandingPage)
+        path: 'despensa',
+        loadComponent: () => import('./tabs/despensa/despensa.page').then(m => m.DespensaPage)
       },
        {
         path: 'recetas',

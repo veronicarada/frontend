@@ -8,7 +8,6 @@ import {
   LoadingController
 } from '@ionic/angular';
 
-// ⬇️ Ajustá la ruta a tu cliente de Supabase si es diferente
 import { supabase } from '../../supabase';
 
 @Component({
@@ -25,6 +24,9 @@ export class RecetasPage implements OnInit {
   filtro = '';
   verSoloFavoritas = false;
 
+  // Ingredientes disponibles (desde Despensa)
+  ingredientesDisponibles: Array<{ id_ingrediente: number; nombre: string }> = [];
+
   // Simulá obtenerla de tu AuthService (setéala en ngOnInit)
   private userId: string | null = null;
 
@@ -35,7 +37,8 @@ export class RecetasPage implements OnInit {
     nombre: '',
     instrucciones: '',
     tiempo_preparacion_min: null,
-    dificultad: ''
+    dificultad: '',
+    ingredientesIds: [] as number[] // <-- requerido
   };
 
   editando = false;
@@ -51,7 +54,7 @@ export class RecetasPage implements OnInit {
     // Ej.: this.userId = this.auth.user()?.id || null;
     this.userId = null; // si ya tenés sesión, setealo aquí
 
-    await this.cargar();
+    await Promise.all([this.cargar(), this.cargarIngredientesDesdeDespensa()]);
   }
 
   // === Helpers ===
@@ -67,6 +70,61 @@ export class RecetasPage implements OnInit {
 
   toggleFavoritas() { this.verSoloFavoritas = !this.verSoloFavoritas; }
 
+  // === Pull to refresh ===
+  async doRefresh(ev: CustomEvent) {
+    try {
+      await Promise.all([this.cargar(), this.cargarIngredientesDesdeDespensa()]);
+    } finally {
+      (ev.target as HTMLIonRefresherElement).complete();
+    }
+  }
+
+  // === Ingredientes desde Despensa (requisito) ===
+  private async cargarIngredientesDesdeDespensa() {
+    try {
+      // 1) Intentar leer ingredientes cargados en la DESPENSA del usuario (si hay userId)
+      let lista: Array<{ id_ingrediente: number; nombre: string }> = [];
+      if (this.userId) {
+        const { data, error } = await supabase
+          .from('despensa')
+          .select(`
+            id_ingrediente,
+            ingrediente:ingrediente ( id_ingrediente, nombre )
+          `)
+          .eq('id_usuario', this.userId);
+
+        if (error) throw error;
+
+        lista = (data ?? [])
+          .map((d: any) => ({
+            id_ingrediente: d?.ingrediente?.id_ingrediente ?? d?.id_ingrediente,
+            nombre: d?.ingrediente?.nombre
+          }))
+          .filter(x => x.id_ingrediente && x.nombre);
+      }
+
+      // 2) Fallback: si no hay userId o la despensa está vacía, tomar catálogo base de 'ingrediente'
+      if (!lista.length) {
+        const { data, error } = await supabase
+          .from('ingrediente')
+          .select('id_ingrediente, nombre')
+          .order('nombre', { ascending: true });
+        if (error) throw error;
+        lista = (data ?? []) as any;
+      }
+
+      // Quitar duplicados por id y ordenar
+      const map = new Map<number, string>();
+      for (const it of lista) map.set(it.id_ingrediente, it.nombre);
+      this.ingredientesDisponibles = Array.from(map.entries())
+        .map(([id, nombre]) => ({ id_ingrediente: id, nombre }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre));
+    } catch (e) {
+      console.error(e);
+      this.toastQuick('No se pudieron cargar los ingredientes de tu despensa');
+    }
+  }
+
   // === Listado con relaciones + favoritos + rating ===
   async cargar() {
     const loader = await this.loading.create({ message: 'Cargando recetas...' });
@@ -76,7 +134,7 @@ export class RecetasPage implements OnInit {
         .from('receta')
         .select(`
           id_receta, id_usuario, nombre, instrucciones, tiempo_preparacion_min, dificultad, fecha_creacion,
-          receta_ingrediente ( cantidad, unidad, ingrediente ( nombre ) ),
+          receta_ingrediente ( cantidad, unidad, ingrediente ( id_ingrediente, nombre ) ),
           receta_etiqueta ( etiquetas ( nombre ) ),
           calificaciones ( estrellas )
         `)
@@ -115,7 +173,6 @@ export class RecetasPage implements OnInit {
   // === Filtro (incluye etiquetas e ingredientes) ===
   get recetasFiltradas() {
     const q = this.filtro.toLowerCase().trim();
-
     const base = this.verSoloFavoritas ? this.recetas.filter(r => r.esFavorita) : this.recetas;
     if (!q) return base;
 
@@ -132,6 +189,12 @@ export class RecetasPage implements OnInit {
   async guardar() {
     if (!this.form?.nombre?.trim() || !this.form?.instrucciones?.trim()) {
       this.toastQuick('Nombre e instrucciones son obligatorios');
+      return;
+    }
+
+    // Requisito: al menos 1 ingrediente de la despensa
+    if (!this.form.ingredientesIds?.length) {
+      this.toastQuick('Seleccioná al menos un ingrediente');
       return;
     }
 
@@ -157,20 +220,45 @@ export class RecetasPage implements OnInit {
     await loader.present();
 
     try {
-      if (this.editando && this.form.id_receta) {
+      let recetaId = this.form.id_receta;
+
+      if (this.editando && recetaId) {
         const { error } = await supabase
           .from('receta')
           .update(payload)
-          .eq('id_receta', this.form.id_receta);
+          .eq('id_receta', recetaId);
         if (error) throw error;
-
         this.toastQuick('Receta actualizada');
       } else {
-        const { error } = await supabase.from('receta').insert(payload);
+        const { data: nueva, error } = await supabase
+          .from('receta')
+          .insert(payload)
+          .select('id_receta')
+          .single();
         if (error) throw error;
-
+        recetaId = nueva?.id_receta;
         this.toastQuick('Receta creada');
       }
+
+      // Sin recetaId no podemos seguir
+      if (!recetaId) throw new Error('No se obtuvo id_receta');
+
+      // Sincronizar tabla intermedia receta_ingrediente:
+      // 1) borrar existentes
+      await supabase.from('receta_ingrediente').delete().eq('id_receta', recetaId);
+
+      // 2) insertar los seleccionados (sin cantidades por ahora)
+      const rows = (this.form.ingredientesIds as number[]).map(idIng => ({
+        id_receta: recetaId,
+        id_ingrediente: idIng,
+        cantidad: null,
+        unidad: null
+      }));
+      if (rows.length) {
+        const { error: eRI } = await supabase.from('receta_ingrediente').insert(rows);
+        if (eRI) throw eRI;
+      }
+
       await this.cargar();
       this.cancelarEdicion(true);
     } catch (e) {
@@ -189,7 +277,10 @@ export class RecetasPage implements OnInit {
       nombre: r.nombre || '',
       instrucciones: r.instrucciones || '',
       tiempo_preparacion_min: r.tiempo_preparacion_min ?? null,
-      dificultad: r.dificultad || ''
+      dificultad: r.dificultad || '',
+      ingredientesIds: (r.receta_ingrediente ?? [])
+        .map((ri: any) => ri?.ingrediente?.id_ingrediente)
+        .filter((x: any) => !!x)
     };
   }
 
@@ -202,7 +293,8 @@ export class RecetasPage implements OnInit {
         nombre: '',
         instrucciones: '',
         tiempo_preparacion_min: null,
-        dificultad: ''
+        dificultad: '',
+        ingredientesIds: []
       };
     }
   }
@@ -218,6 +310,9 @@ export class RecetasPage implements OnInit {
           role: 'destructive',
           handler: async () => {
             try {
+              // Borrar relaciones primero para mantener integridad visual
+              await supabase.from('receta_ingrediente').delete().eq('id_receta', r.id_receta);
+
               const { error } = await supabase
                 .from('receta')
                 .delete()
@@ -277,7 +372,7 @@ export class RecetasPage implements OnInit {
       });
       if (error) throw error;
 
-      // refrescamos solo las estrellas
+      // refrescar solo las estrellas
       const { data: calis, error: e2 } = await supabase
         .from('calificaciones')
         .select('estrellas')

@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar class="mg-toolbar">
+    <ion-title>Despensa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding mg-bg">
+
+  <!-- Buscador -->
+  <ion-item class="mg-search" lines="none">
+    <ion-icon name="search" slot="start" aria-hidden="true"></ion-icon>
+    <ion-input placeholder="Filtrar por nombre o categoría" [(ngModel)]="filtro"></ion-input>
+    <ion-spinner *ngIf="loading" slot="end"></ion-spinner>
+  </ion-item>
+
+  <!-- Formulario alta/edición -->
+  <ion-card class="mg-card">
+    <ion-card-header>
+      <ion-card-title>{{ editMode ? 'Editar ingrediente' : 'Nuevo ingrediente' }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form (ngSubmit)="guardar()">
+        <div class="mg-grid">
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Nombre *</ion-label>
+            <ion-input [(ngModel)]="nombre" name="nombre" required></ion-input>
+          </ion-item>
+
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Categoría</ion-label>
+            <ion-input [(ngModel)]="categoria" name="categoria"></ion-input>
+          </ion-item>
+
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Calorías</ion-label>
+            <ion-input type="number" [(ngModel)]="calorias" name="calorias"></ion-input>
+          </ion-item>
+
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Proteínas (g)</ion-label>
+            <ion-input type="number" [(ngModel)]="proteinas" name="proteinas"></ion-input>
+          </ion-item>
+
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Carbohidratos (g)</ion-label>
+            <ion-input type="number" [(ngModel)]="carbohidratos" name="carbohidratos"></ion-input>
+          </ion-item>
+
+          <ion-item class="mg-field" lines="full">
+            <ion-label position="stacked">Grasas (g)</ion-label>
+            <ion-input type="number" [(ngModel)]="grasas" name="grasas"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="actions">
+          <ion-button type="submit" expand="block" class="mg-cta">
+            {{ editMode ? 'Actualizar' : 'Guardar' }}
+          </ion-button>
+          <ion-button expand="block" fill="outline" class="mg-outline" (click)="limpiarForm()" *ngIf="editMode">
+            Cancelar edición
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Listado -->
+  <ion-list class="mg-list">
+    <ion-list-header>
+      <ion-label>Ingredientes</ion-label>
+    </ion-list-header>
+
+    <ion-item class="mg-row" lines="full" *ngFor="let it of listaFiltrada">
+      <ion-label>
+        <h2>{{ it.nombre }}</h2>
+        <p *ngIf="it.categoria">Cat: {{ it.categoria }}</p>
+        <p class="micro">
+          {{ it.calorias ? ('Cal ' + it.calorias + ' · ') : '' }}
+          {{ it.proteinas ? ('Prot ' + it.proteinas + 'g · ') : '' }}
+          {{ it.carbohidratos ? ('Carb ' + it.carbohidratos + 'g · ') : '' }}
+          {{ it.grasas ? ('Gr ' + it.grasas + 'g') : '' }}
+        </p>
+      </ion-label>
+
+      <ion-buttons slot="end" class="mg-actions">
+        <ion-button size="small" fill="clear" class="act edit" (click)="editar(it)">
+          <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button size="small" fill="clear" class="act del" (click)="confirmarBorrar(it)">
+          <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-item class="mg-row" lines="none" *ngIf="!loading && listaFiltrada.length === 0">
+      <ion-label>No hay ingredientes</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -20,10 +20,7 @@ ion-toolbar {
   --color: var(--mg-ink);
   border-bottom: 1px solid rgba(0,0,0,.05);
 }
-ion-title {
-  font-weight: 800;
-  letter-spacing: .3px;
-}
+ion-title { font-weight: 800; letter-spacing: .3px; }
 
 /* ===== Buscador pill ===== */
 .mg-search {
@@ -33,10 +30,7 @@ ion-title {
   border-radius: 999px;
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
 }
-.mg-search ion-input {
-  font-weight: 600;
-  color: var(--mg-ink);
-}
+.mg-search ion-input { font-weight: 600; color: var(--mg-ink); }
 
 /* ===== Card formulario ===== */
 .mg-form-card {
@@ -46,11 +40,7 @@ ion-title {
   background: #fffaf5;
   box-shadow: 0 12px 30px rgba(255, 126, 95, .18);
 }
-ion-card-title {
-  color: var(--mg-coral);
-  font-weight: 800;
-  letter-spacing: .2px;
-}
+ion-card-title { color: var(--mg-coral); font-weight: 800; letter-spacing: .2px; }
 
 /* Inputs */
 .mg-input {
@@ -61,10 +51,7 @@ ion-card-title {
   --highlight-color-focused: var(--mg-coral);
   --min-height: 70px;
 }
-ion-label {
-  color: var(--mg-muted);
-  font-weight: 600;
-}
+ion-label { color: var(--mg-muted); font-weight: 600; }
 ion-input, ion-textarea, ion-select {
   font-size: 15px;
   color: var(--mg-ink);
@@ -73,11 +60,7 @@ ion-input, ion-textarea, ion-select {
   padding-bottom: 6px;
 }
 
-.mg-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
+.mg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 /* Botones */
 .btns { margin-top: 10px; display: grid; gap: 8px; }
@@ -86,18 +69,13 @@ ion-input, ion-textarea, ion-select {
   --box-shadow: 0 8px 20px rgba(255, 126, 95, .35);
   border-radius: 14px;
   height: 48px;
-  font-weight: 800;
-  letter-spacing: .2px;
+  font-weight: 800; letter-spacing: .2px;
 }
 
 /* ===== Listado ===== */
-.mg-list {
-  max-width: 920px;
-  margin: 0 auto 28px;
-  background: transparent;
-}
+.mg-list { max-width: 920px; margin: 0 auto 28px; background: transparent; }
 
-/* Tarjeta receta (ion-item) */
+/* Tarjeta receta */
 .mg-recipe {
   --background: #fff;
   border-radius: 18px;
@@ -107,67 +85,35 @@ ion-input, ion-textarea, ion-select {
 }
 
 /* Cabecera de receta */
-.mg-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
+.mg-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .mg-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 900;
-  color: var(--mg-ink);
-  letter-spacing: .2px;
+  margin: 0; font-size: 1.25rem; font-weight: 900;
+  color: var(--mg-ink); letter-spacing: .2px;
 }
 
 /* Botones redondos de acción */
 .mg-icon-btn {
-  --padding-start: 6px;
-  --padding-end: 6px;
+  --padding-start: 6px; --padding-end: 6px;
   --background: #fff3ef;
   --box-shadow: 0 4px 12px rgba(255, 126, 95, .25);
-  border-radius: 999px;
-  --color: var(--mg-coral);
-  color: var(--mg-coral);
-  min-width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 999px; --color: var(--mg-coral); color: var(--mg-coral);
+  min-width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
 }
 .mg-icon-btn.danger { --background: #ffe9e9; }
 
 /* Meta (chips) */
-.mg-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 6px 2px 4px;
-}
+.mg-meta { display: flex; align-items: center; gap: 10px; margin: 6px 2px 4px; }
 
 /* Chip dificultad */
-.mg-chip {
-  height: 26px;
-  font-weight: 800;
-  border-radius: 999px;
-  --background: rgba(96,200,120,.12);
-  --color: #2a7a49;
-}
-.mg-chip.easy { --background: rgba(96,200,120,.14); --color: #2a7a49; }   /* verde */
-.mg-chip.med  { --background: rgba(254,180,123,.18); --color: #A45A00; }  /* naranja */
-.mg-chip.hard { --background: rgba(255,0,0,.18); --color: #d41010; }      /* rojo */
+.mg-chip { height: 26px; font-weight: 800; border-radius: 999px; --background: rgba(96,200,120,.12); --color: #2a7a49; }
+.mg-chip.easy { --background: rgba(96,200,120,.14); --color: #2a7a49; }
+.mg-chip.med  { --background: rgba(254,180,123,.18); --color: #A45A00; }
+.mg-chip.hard { --background: rgba(255,0,0,.18); --color: #d41010; }
 
 /* Badge */
 .mg-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-weight: 800;
-  font-size: .82rem;
-  color: #9B5600;
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+  border-radius: 999px; font-weight: 800; font-size: .82rem; color: #9B5600;
   background: rgba(254,180,123,.22);
 }
 
@@ -175,36 +121,23 @@ ion-input, ion-textarea, ion-select {
 .mg-tags { display:flex; flex-wrap:wrap; gap:6px; margin: 6px 2px; }
 
 /* Calificar */
-.mg-rate { margin: blue; }
+.mg-rate { margin: 6px 2px; }
 
 /* Descripción */
 .mg-desc {
-  margin: 6px 2px 4px;
-  color: #3b3b3b;
-  line-height: 1.45;
-  white-space: pre-wrap;
-  font-weight: 600;
-  font-size: .98rem;
+  margin: 6px 2px 4px; color: #3b3b3b; line-height: 1.45; white-space: pre-wrap;
+  font-weight: 600; font-size: .98rem;
 }
 
 /* Nota vacío */
-ion-note {
-  display: block;
-  text-align: center;
-  margin-top: 18px;
-  color: var(--mg-muted);
-}
+ion-note { display: block; text-align: center; margin-top: 18px; color: var(--mg-muted); }
 
 /* Transiciones */
 ion-item, ion-card, ion-button { transition: all .18s ease; }
 .mg-recipe:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,.10); }
 
 /* Lupita buscador */
-.mg-search ion-icon[slot="start"] {
-  color: var(--mg-muted);
-  font-size: 20px;
-  margin-right: 4px;
-}
+.mg-search ion-icon[slot="start"] { color: var(--mg-muted); font-size: 20px; margin-right: 4px; }
 
 /* Fuerza color iconos en botones */
 .mg-icon-btn { --color: var(--mg-coral); color: var(--mg-coral); }
