@@ -1,38 +1,86 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="despensa" [routerLink]="['/tabs/despensa']">
-    <ion-icon name="basket-outline"></ion-icon>
-  <ion-label>Despensa</ion-label>
-    </ion-tab-button>
+<ion-header>
+  <ion-toolbar class="mg-toolbar">
+    <ion-title>Tips</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-     <ion-tab-button tab="recetas" href="/tabs/recetas">
-      <ion-icon name="restaurant-outline"></ion-icon>
-      <ion-label>Recetas</ion-label>
-    </ion-tab-button>
+<ion-content class="mg-bg ion-padding">
 
-      <ion-tab-button tab="plan" href="/tabs/plan">
-      <ion-icon name="calendar"></ion-icon>
-      <ion-label>Plan</ion-label>
-    </ion-tab-button>
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="cargarTips($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar"></ion-refresher-content>
+  </ion-refresher>
 
-    <ion-tab-button tab="health" [routerLink]="['/tabs/health']">
-      <img src="assets/img/heart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
+  <!-- 🔍 Buscador -->
+  <ion-item class="mg-search">
+    <ion-icon name="search" slot="start" aria-hidden="true"></ion-icon>
+    <ion-input
+      placeholder="Buscar por título o descripción"
+      [(ngModel)]="filtro"
+      (ionInput)="onBuscarChange()">
+    </ion-input>
+  </ion-item>
 
-    <ion-tab-button tab="capture" [routerLink]="['/tabs/capture']">
-      <img src="assets/img/camera-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
+  <!-- 🏷️ Filtros por categoría (chips scrollables) -->
+  <div class="mg-chip-scroll">
+    <ion-chip
+      *ngFor="let cat of categorias"
+      class="mg-chip"
+      [outline]="categoriaSeleccionada !== cat.value"
+      [color]="categoriaSeleccionada === cat.value ? 'primary' : undefined"
+      (click)="onSeleccionCategoria(cat.value)">
+      <span class="mg-chip-emoji">{{ cat.emoji }}</span>
+      <span class="mg-chip-text">{{ cat.text }}</span>
+    </ion-chip>
+  </div>
 
-    <ion-tab-button tab="stats" [routerLink]="['/tabs/stats']">
-      <img src="assets/img/bar-chart-sharp.svg" alt="Logout" style="width: 24px; height: 24px;" /> 
-    </ion-tab-button>
- 
-    <ion-tab-button (click)="logoutDirect()" tab="profile">
-      <img src="assets/img/log-out-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
-    </ion-tab-button>
-    
-  </ion-tab-bar>
-</ion-tabs>
+  <!-- Estado de carga -->
+  <ng-container *ngIf="cargando">
+    <ion-card class="mg-skeleton" *ngFor="let i of [1,2,3,4]">
+      <ion-card-header>
+        <div class="mg-skel-line w40"></div>
+        <div class="mg-skel-line w70"></div>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="mg-skel-line w90"></div>
+        <div class="mg-skel-line w80"></div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
 
+  <!-- Error -->
+  <ion-card *ngIf="!cargando && errorMsg">
+    <ion-card-content>{{ errorMsg }}</ion-card-content>
+  </ion-card>
 
+  <!-- Lista dinámica -->
+  <ion-list *ngIf="!cargando && !errorMsg && tips.length">
+    <ion-card
+      class="mg-tip-card"
+      *ngFor="let tip of tips"
+      [ngClass]="categoryClass(tip.categoria)">
 
+      <ion-card-header>
+        <div class="mg-tip-header">
+          <div class="mg-tip-emoji">{{ getEmoji(tip.categoria) }}</div>
+          <ion-card-title class="mg-tip-title">{{ tip.titulo }}</ion-card-title>
+        </div>
+
+        <!-- Badge solo si la categoría es válida -->
+        <ion-note class="mg-badge" *ngIf="getText(tip.categoria) !== 'Tip'">
+          {{ getText(tip.categoria) }}
+        </ion-note>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p class="mg-tip-text">{{ tip.descripcion }}</p>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <!-- Vacío -->
+  <ion-card *ngIf="!cargando && !errorMsg && !tips.length">
+    <ion-card-content>No hay tips para mostrar con esos filtros.</ion-card-content>
+  </ion-card>
+
+</ion-content>

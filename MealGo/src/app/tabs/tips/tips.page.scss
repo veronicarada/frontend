@@ -1,34 +1,118 @@
-ion-tab-bar {
-  --background: #fff;
-  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
-  height: 65px;
+/* ===== Fondo y header (estilo Recetas) ===== */
+.mg-bg {
+  --background: linear-gradient(180deg, #ffe0d1 0%, #fff4ee 26%, #ffffff 100%);
 }
-
-/* Color general de los iconos/textos */
-ion-tab-button {
-  --color: #7c7c7c; /* gris base */
-  --color-selected: #FF7E5F; /* coral MealGo */
-  font-weight: 600;
-}
-
-/* Hace que los iconos sean un poco más grandes */
-ion-icon {
-  font-size: 22px;
-}
-
-/* --- Estilo especial para el tab de Recetas --- */
-ion-tab-button[tab="recetas"] {
-  --color: #333333; /* gris oscuro cuando NO está activo */
-}
-
-/* Cuando está seleccionado, lo hacemos más oscuro y fuerte */
-ion-tab-button[tab="recetas"].tab-selected {
-  --color-selected: #d6451f; /* coral oscuro */
-  color: #d6451f !important;
+.mg-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  color: #111827;
   font-weight: 700;
 }
 
-ion-tab-button[tab="recetas"].tab-selected ion-icon {
-  color: #d6451f !important;
-  transform: scale(1.05);
+/* ===== Buscador ===== */
+.mg-search {
+  --background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(16, 24, 40, 0.06);
+  margin-bottom: 12px;
+
+  ion-icon { font-size: 20px; opacity: .8; }
+}
+
+/* ===== Chips ===== */
+.mg-chip-scroll {
+  display: flex; gap: 10px; overflow-x: auto;
+  padding: 6px 2px 10px; margin-bottom: 6px;
+
+  .mg-chip {
+    --background: #fff;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  }
+  .mg-chip-emoji { font-size: 18px; margin-right: 6px; }
+  .mg-chip-text { font-weight: 700; white-space: nowrap; letter-spacing: .2px; }
+}
+
+/* ===== Cards ===== */
+.mg-tip-card {
+  position: relative;
+  border-radius: 18px;
+  margin: 10px 0 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.96));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 14px 32px rgba(16, 24, 40, .12);
+  transition: transform .12s ease, box-shadow .12s ease;
+
+  &:hover { transform: translateY(-1px); box-shadow: 0 18px 36px rgba(16,24,40,.16); }
+
+  &::before {
+    content: "";
+    position: absolute; inset: 0 0 0 0;
+    border-left: 6px solid #e5e7eb; /* default */
+    border-radius: 18px; pointer-events: none;
+  }
+}
+
+.mg-tip-header { display: flex; align-items: center; gap: 12px; }
+.mg-tip-emoji {
+  width: 38px; height: 38px; min-width: 38px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 20px;
+  background: #f3f4f6; box-shadow: inset 0 1px 1px rgba(0,0,0,.06);
+}
+.mg-tip-title { font-weight: 800; color: #0f172a; letter-spacing: .2px; }
+
+.mg-badge {
+  display: inline-block; margin-top: 6px; padding: 4px 10px;
+  font-size: 12px; font-weight: 700; border-radius: 999px;
+  background: #eef2ff; color: #3730a3;
+}
+
+.mg-tip-text { color: #334155; line-height: 1.5; font-weight: 500; }
+ion-card-header { padding: 14px 16px 4px; }
+ion-card-content { padding: 6px 16px 14px; }
+
+/* ===== Paleta por categoría ===== */
+.cat-grupos   { --cat: #10b981; }     /* emerald */
+.cat-hidratacion { --cat: #3b82f6; }  /* blue */
+.cat-reduccion { --cat: #f59e0b; }    /* amber */
+.cat-habitos  { --cat: #ef4444; }     /* red */
+.cat-ahorro   { --cat: #22c55e; }     /* green */
+.cat-default  { --cat: #94a3b8; }     /* slate-400 */
+
+.cat-grupos.mg-tip-card::before,
+.cat-hidratacion.mg-tip-card::before,
+.cat-reduccion.mg-tip-card::before,
+.cat-habitos.mg-tip-card::before,
+.cat-ahorro.mg-tip-card::before,
+.cat-default.mg-tip-card::before {
+  border-left-color: var(--cat);
+}
+
+.cat-grupos   .mg-tip-emoji { background: rgba(16,185,129,.12); }
+.cat-hidratacion .mg-tip-emoji { background: rgba(59,130,246,.12); }
+.cat-reduccion .mg-tip-emoji { background: rgba(245,158,11,.12); }
+.cat-habitos  .mg-tip-emoji { background: rgba(239,68,68,.12); }
+.cat-ahorro   .mg-tip-emoji { background: rgba(34,197,94,.12); }
+
+.cat-grupos   .mg-badge { background: rgba(16,185,129,.12); color:#065f46; }
+.cat-hidratacion .mg-badge { background: rgba(59,130,246,.12); color:#1e3a8a; }
+.cat-reduccion .mg-badge { background: rgba(245,158,11,.14); color:#7c2d12; }
+.cat-habitos  .mg-badge { background: rgba(239,68,68,.14); color:#7f1d1d; }
+.cat-ahorro   .mg-badge { background: rgba(34,197,94,.14); color:#14532d; }
+
+/* ===== Skeletons ===== */
+.mg-skeleton { padding: 10px 0; }
+.mg-skel-line {
+  height: 12px; border-radius: 8px; background: #f1f5f9;
+  margin: 8px 16px;
+  &.w40 { width: 40%; } &.w70 { width: 70%; }
+  &.w80 { width: 80%; } &.w90 { width: 90%; }
+}
+
+/* Card simple para vacío/error */
+ion-card:has(> ion-card-content:only-child) {
+  --background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
 }
