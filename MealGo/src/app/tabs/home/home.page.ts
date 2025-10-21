@@ -1,20 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonicModule } from '@ionic/angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-health',
-  templateUrl: './health.page.html',
-  styleUrls: ['./health.page.scss'],
+  selector: 'app-home',
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  // Necesitamos RouterModule para usar [routerLink] en el HTML
+  imports: [CommonModule, IonicModule, RouterModule],
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
-export class HealthPage implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class HomePage {}

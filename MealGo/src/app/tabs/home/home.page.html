@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar class="mg-toolbar">
+    <ion-title>Inicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="mg-bg ion-padding safe-bottom">
+
+  <h2 class="mg-h2">Bienvenido a <span>MealGo</span> 🍽️</h2>
+
+  <ion-grid fixed class="mg-grid">
+    <ion-row>
+      <ion-col size="6">
+        <!-- 👉 Lleva al tab Plan -->
+        <ion-card class="mg-card" button [routerLink]="['/tabs/plan']" routerDirection="root">
+          <div class="mg-card-icon">
+            <ion-icon name="calendar-clear-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <h3>Plan de comidas</h3>
+          <p>Crea y gestiona tus planes</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <!-- 👉 Lleva al tab Recetas -->
+        <ion-card class="mg-card" button [routerLink]="['/tabs/recetas']" routerDirection="root">
+          <div class="mg-card-icon">
+            <ion-icon name="restaurant-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <h3>Recetas</h3>
+          <p>Encontrá y añadí recetas</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <!-- 👉 Lleva al tab Despensa -->
+        <ion-card class="mg-card" button [routerLink]="['/tabs/despensa']" routerDirection="root">
+          <div class="mg-card-icon">
+            <ion-icon name="basket-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <h3>Despensa</h3>
+          <p>Administra tus ingredientes</p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="6">
+        <!-- 👉 Lleva al tab Tips -->
+        <ion-card class="mg-card" button [routerLink]="['/tabs/tips']" routerDirection="root">
+          <div class="mg-card-icon">
+            <ion-icon name="leaf-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <h3>Tips</h3>
+          <p>Consejos alimenticios</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <!-- 👉 Lleva al tab Usuario (ojo: singular para coincidir con el tab bar) -->
+        <ion-card class="mg-card mg-card-wide" button [routerLink]="['/tabs/usuario']" routerDirection="root">
+          <div class="mg-card-icon">
+            <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
+          </div>
+          <h3>Usuario</h3>
+          <p>Perfil, suscripción y más</p>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

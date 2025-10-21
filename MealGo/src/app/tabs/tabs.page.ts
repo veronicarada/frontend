@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Auth } from 'src/app/services/auth';
@@ -17,6 +17,7 @@ import {
   standalone: true,
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     RouterModule,
@@ -25,6 +26,7 @@ import {
     IonTabButton,
     IonIcon,
     IonLabel
+
   ]
 })
 
@@ -35,4 +37,5 @@ export class TabsPage {
     await this.auth.logout();
     this.router.navigateByUrl('/login');
   }
+
 }

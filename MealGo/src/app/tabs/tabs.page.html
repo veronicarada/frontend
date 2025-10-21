@@ -1,36 +1,37 @@
 <ion-tabs>
-  <ion-tab-bar slot="bottom">
-       <ion-tab-button tab="home" [routerLink]="['/tabs/home']">
-    <ion-icon name="home-outline"></ion-icon>
-  <ion-label>Despensa</ion-label>
+  <ion-tab-bar slot="bottom" class="mg-tabbar">
+
+    <ion-tab-button tab="home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="despensa" [routerLink]="['/tabs/despensa']">
-    <ion-icon name="basket-outline"></ion-icon>
-  <ion-label>Despensa</ion-label>
+      <ion-tab-button tab="ingredientes">
+      <ion-icon name="basket-outline"></ion-icon>
+      <ion-label>ingredientes</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button tab="plan">
+      <ion-icon name="calendar-clear-outline"></ion-icon>
+      <ion-label>Plan</ion-label>
 
-     <ion-tab-button tab="recetas" href="/tabs/recetas">
+    <ion-tab-button tab="recetas">
       <ion-icon name="restaurant-outline"></ion-icon>
       <ion-label>Recetas</ion-label>
     </ion-tab-button>
 
-
-      <ion-tab-button tab="plan" href="/tabs/plan">
-      <ion-icon name="calendar"></ion-icon>
-      <ion-label>Plan</ion-label>
-    </ion-tab-button>
-
-          <ion-tab-button tab="tips" href="/tabs/tips">
-       <ion-icon name="leaf-outline" class="mg-icon"></ion-icon>
+    <ion-tab-button tab="tips">
+      <ion-icon name="leaf-outline"></ion-icon>
       <ion-label>Tips</ion-label>
     </ion-tab-button>
 
- 
-    <ion-tab-button (click)="logoutDirect()" tab="profile">
+    <ion-tab-button tab="usuario">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Usuario</ion-label>
+    </ion-tab-button>
+
+<ion-tab-button (click)="logoutDirect()" tab="profile">
       <img src="assets/img/log-out-outline.svg" alt="Logout" style="width: 24px; height: 24px;" />
     </ion-tab-button>
-   
   </ion-tab-bar>
 </ion-tabs>
