@@ -16,19 +16,3 @@ ion-icon {
   font-size: 22px;
 }
 
-/* --- Estilo especial para el tab de Recetas --- */
-ion-tab-button[tab="recetas"] {
-  --color: #333333; /* gris oscuro cuando NO está activo */
-}
-
-/* Cuando está seleccionado, lo hacemos más oscuro y fuerte */
-ion-tab-button[tab="recetas"].tab-selected {
-  --color-selected: #d6451f; /* coral oscuro */
-  color: #d6451f !important;
-  font-weight: 700;
-}
-
-ion-tab-button[tab="recetas"].tab-selected ion-icon {
-  color: #d6451f !important;
-  transform: scale(1.05);
-}
