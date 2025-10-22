@@ -4,8 +4,10 @@ import { supabase } from '../supabase';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
-  // ⚠️ Mantengo tu comportamiento original: ordena por 'fecha_creacion'
-  // (si la tabla no tiene esa columna, usa getAllBy).
+  // =========================================
+  // Genéricos (tus originales)
+  // =========================================
+  // ⚠️ Ordena por 'fecha_creacion' (si la tabla no la tiene, usá getAllBy)
   async getAll(table: string) {
     const { data, error } = await supabase
       .from(table)
@@ -26,7 +28,11 @@ export class DatabaseService {
   }
 
   async insert(table: string, record: any) {
-    const { data, error } = await supabase.from(table).insert([record]).select().single();
+    const { data, error } = await supabase
+      .from(table)
+      .insert([record])
+      .select()
+      .single();
     if (error) throw error;
     return data;
   }
@@ -43,7 +49,7 @@ export class DatabaseService {
   }
 
   async delete(table: string, idField: string, idValue: any) {
-    // Mantengo tu patrón de .select().single() para consistencia con tus llamadas
+    // Mantengo tu patrón de .select().single() para consistencia
     const { data, error } = await supabase
       .from(table)
       .delete()
@@ -54,23 +60,18 @@ export class DatabaseService {
     return data;
   }
 
-  // ---------------------------
-  // Aliases para compatibilidad
-  // ---------------------------
-  // Para páginas que llaman updateBy/deleteBy (plan.page.ts, etc.)
+  // Aliases de compatibilidad
   async updateBy(table: string, idField: string, idValue: any, record: any) {
     return this.update(table, idField, idValue, record);
   }
-
   async deleteBy(table: string, idField: string, idValue: any) {
     return this.delete(table, idField, idValue);
   }
 
-  // ---------------------------
-  // Ingredientes (despensa.page.ts)
-  // ---------------------------
-  // Nota: estas operan sobre la tabla 'ingrediente'.
-  // Si tu despensa usa 'usuario_ingrediente' (PK compuesta), avisame y te dejo versiones por usuario.
+  // =========================================
+  // Ingredientes (tab Despensa)
+  // Tabla: ingrediente
+  // =========================================
   async getIngredientes() {
     const { data, error } = await supabase
       .from('ingrediente')
@@ -102,14 +103,146 @@ export class DatabaseService {
     return data;
   }
 
+  /**
+   * Eliminar un ingrediente:
+   * 1) borra relaciones en receta_ingrediente (FK compuesta)
+   * 2) borra el ingrediente
+   */
   async deleteIngrediente(id_ingrediente: string) {
-    const { data, error } = await supabase
+    // 1) borrar relaciones N:M
+    const delRel = await supabase
+      .from('receta_ingrediente')
+      .delete()
+      .eq('id_ingrediente', id_ingrediente);
+    if (delRel.error) throw delRel.error;
+
+    // 2) borrar ingrediente
+    const delIng = await supabase
       .from('ingrediente')
       .delete()
-      .eq('id_ingrediente', id_ingrediente)
-      .select()
+      .eq('id_ingrediente', id_ingrediente);
+    if (delIng.error) throw delIng.error;
+
+    return { ok: true };
+  }
+
+  /**
+   * Recetas que usan un ingrediente (por id_ingrediente)
+   * Devuelve array del tipo: [{ receta: { id_receta, nombre, ... }}, ...]
+   */
+  async getRecetasPorIngrediente(id_ingrediente: string) {
+    const { data, error } = await supabase
+      .from('receta_ingrediente')
+      .select(`
+        receta:receta (
+          id_receta,
+          nombre,
+          dificultad,
+          tiempo_preparacion_min
+        )
+      `)
+      .eq('id_ingrediente', id_ingrediente);
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  // =========================================
+  // Recetas (tab Recetas)
+  // Tablas: receta, receta_ingrediente
+  // =========================================
+
+  // Traer receta por id con ingredientes relacionados
+  async getRecetaById(id_receta: string) {
+    const { data, error } = await supabase
+      .from('receta')
+      .select(`
+        id_receta,
+        nombre,
+        instrucciones,
+        tiempo_preparacion_min,
+        dificultad,
+        receta_ingrediente (
+          id_ingrediente,
+          cantidad,
+          unidad,
+          ingrediente:ingrediente (
+            id_ingrediente,
+            nombre
+          )
+        )
+      `)
+      .eq('id_receta', id_receta)
       .single();
+
     if (error) throw error;
     return data;
+  }
+
+  // Actualizar campos de la receta
+  async updateReceta(id_receta: string, payload: any) {
+    const { data, error } = await supabase
+      .from('receta')
+      .update(payload)
+      .eq('id_receta', id_receta)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Reemplazar completamente los ingredientes de una receta
+   * (estrategia segura: DELETE + INSERT)
+   */
+  async replaceRecetaIngredientes(
+    id_receta: string,
+    items: Array<{ id_ingrediente: string; cantidad?: number; unidad?: string }>
+  ) {
+    // 1) borrar actuales
+    const del = await supabase
+      .from('receta_ingrediente')
+      .delete()
+      .eq('id_receta', id_receta);
+    if (del.error) throw del.error;
+
+    if (!items || items.length === 0) return { ok: true };
+
+    // 2) insertar nuevos
+    const rows = items.map((x) => ({
+      id_receta,
+      id_ingrediente: x.id_ingrediente,
+      cantidad: x.cantidad ?? 1,
+      unidad: x.unidad ?? 'unidad',
+    }));
+
+    const { error: insErr } = await supabase
+      .from('receta_ingrediente')
+      .insert(rows);
+    if (insErr) throw insErr;
+
+    return { ok: true };
+  }
+
+  /**
+   * Eliminar una receta:
+   * 1) borra relaciones en receta_ingrediente
+   * 2) borra la receta
+   */
+  async deleteReceta(id_receta: string) {
+    const delRel = await supabase
+      .from('receta_ingrediente')
+      .delete()
+      .eq('id_receta', id_receta);
+    if (delRel.error) throw delRel.error;
+
+    const delRec = await supabase
+      .from('receta')
+      .delete()
+      .eq('id_receta', id_receta);
+    if (delRec.error) throw delRec.error;
+
+    return { ok: true };
   }
 }

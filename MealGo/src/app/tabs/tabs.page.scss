@@ -17,11 +17,11 @@ ion-icon {
 }
 .mg-tabbar {
   --background: #ffffff;
-  --color-selected: #3c6e71;
+  --color-selected: #ff6b01;
   ion-tab-button {
     color: #5c5c5c;
     &.tab-selected {
-      color: #3c6e71;
+      color: #e76800;
     }
   }
   ion-icon {

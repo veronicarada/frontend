@@ -36,14 +36,6 @@ export const routes: Routes = [
         loadComponent: () => import('./tabs/home/home.page').then(m => m.HomePage)
       },
       {
-        path: 'capture',
-        loadComponent: () => import('./tabs/capture/capture.page').then(m => m.CapturePage)
-      },
-      {
-        path: 'stats',
-        loadComponent: () => import('./tabs/stats/stats.page').then(m => m.StatsPage)
-      },
-      {
         path: 'profile',
         loadComponent: () => import('./tabs/profile/profile.page').then(m => m.ProfilePage)
       },

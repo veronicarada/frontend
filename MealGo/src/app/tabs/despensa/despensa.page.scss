@@ -1,98 +1,105 @@
-/* Fondo degradé y cabecera */
+/* Fondo suave degradé MealGo */
 .mg-bg {
-  --background: linear-gradient(180deg, #ffe6d6 0%, #ffeede 100%);
+  --background: linear-gradient(180deg, #ffe7dc 0%, #fff7f1 60%, #ffffff 100%);
 }
 
+/* Toolbar */
 .mg-toolbar {
-  --background: transparent;
-  --border-width: 0;
-  ion-title { font-weight: 800; }
+  --background: #fff;
+  --color: #2b2b2b;
+  border-bottom: 1px solid #f1ded3;
 }
 
-/* Buscador pill */
+/* Buscador */
 .mg-search {
   --background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.06);
-  margin-bottom: 12px;
-
-  ion-icon { color: #ff7a4a; }
-  ion-input { --padding-start: 4px; }
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(255, 148, 104, 0.12);
+  margin-bottom: 14px;
 }
+.mg-search ion-icon { color: #ff8a5b; }
 
-/* Tarjeta suave */
+/* Tarjeta formulario */
 .mg-card {
-  background: #fffaf5;
   border-radius: 18px;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-  margin-top: 12px;
-
-  ion-card-title {
-    font-weight: 800;
-    font-size: 1.4rem;
-    color:#fd916d;
-  }
+  box-shadow: 0 12px 32px rgba(255, 138, 91, 0.15);
+  background: #fffaf7;
+  border: 1px solid #ffe0cf;
 }
+.mg-card ion-card-title { font-weight: 700; }
 
-/* Grid de campos */
 .mg-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
-
-@media (min-width: 900px) {
-  .mg-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 640px) {
+  .mg-grid { grid-template-columns: 1fr; }
 }
 
-/* Campo de formulario */
 .mg-field {
   --background: #fff;
-  border-radius: 14px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  border-radius: 12px;
+  border: 1px solid #ffe0cf;
 }
 
-/* Botón CTA y outline */
+/* Botones CTA */
 .mg-cta {
-  --background: linear-gradient(180deg,#ff905e 0%, #ff7a4a 100%);
-  --background-activated: #ff6d3b;
-  --border-radius: 14px;
-  font-weight: 800;
-  letter-spacing: .3px;
-  margin-top: 12px;
-}
-
-.mg-outline {
-  --border-color: #ff7a4a;
-  --color: #ff7a4a;
-  --border-radius: 14px;
+  --background: linear-gradient(90deg, #ff8a5b, #ffb585);
+  --border-radius: 12px;
   font-weight: 700;
+  letter-spacing: .4px;
+  margin-top: 8px;
+}
+.mg-outline {
+  --border-color: #ff8a5b;
+  --color: #ff8a5b;
+  --border-radius: 12px;
 }
 
-/* Lista y filas */
+/* Listado */
 .mg-list {
+  margin-top: 12px;
   background: transparent;
-
-  ion-list-header {
-    --background: transparent;
-    font-weight: 700;
-    margin-top: 16px;
-  }
 }
-
 .mg-row {
   --background: #fff;
   border-radius: 14px;
-  margin: 8px 0;
-  box-shadow: 0 8px 18px rgba(0,0,0,.06);
+  margin-bottom: 10px;
+  border: 1px solid #ffe0cf;
+  box-shadow: 0 6px 16px rgba(255, 138, 91, 0.08);
+}
+.mg-row h2 { font-weight: 700; }
+.micro { color: #6f6f6f; font-size: 12px; }
 
-  h2 { font-weight: 800; margin-bottom: 2px; }
-  .micro { font-size: 12px; opacity: .7; }
+.mg-actions .act.see { color: #ff8a5b; font-weight: 600; }
+.mg-actions .act.edit { color: #2f7df4; }
+.mg-actions .act.del { color: #ef4444; }
+
+/* Modal recetas */
+ion-modal {
+  --border-radius: 18px;
+  --width: 92%;
+  --max-width: 640px;
+  --height: 80%;
+}
+.mg-recipe-row {
+  --background: #fff;
+  border-radius: 12px;
+  margin: 8px 0;
+  border: 1px solid #ffe0cf;
+}
+.mg-empty {
+  text-align: center;
+  color: #666;
+  margin-top: 32px;
+}
+.mg-empty ion-icon {
+  font-size: 42px;
+  color: #ffb585;
+  display: block;
+  margin-bottom: 8px;
 }
 
-/* Acciones de fila */
-.mg-actions .act.edit  { color: #ff7a4a; }
-.mg-actions .act.del   { color: #d93025; }
-
-/* Extras pedidos inicialmente */
-.actions { margin-top: 12px; display: grid; gap: 8px; }
+/* Acciones del form */
+.actions { margin-top: 6px; }
