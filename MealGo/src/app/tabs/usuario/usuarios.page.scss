@@ -1,0 +1,148 @@
+/* ====== MealGo Minimal Naranjita ====== */
+:host {
+  /* Paleta */
+  --mg-primary: #ff7a3d;
+  --mg-primary-600: #ff6a26;
+  --mg-bg: #fff7f1;        /* fondo app suave */
+  --mg-surface: #ffffff;   /* tarjetas / toolbar */
+  --mg-ink: #0f172a;       /* texto principal */
+  --mg-muted: #64748b;     /* texto secundario */
+  --mg-ring: rgba(255,122,61,.35); /* foco inputs/selects */
+
+  /* Sombra suave */
+  --mg-shadow: 0 10px 24px rgba(255,122,61,.12);
+}
+
+.mg-bg {
+  --background: var(--mg-bg);
+}
+
+/* Toolbar con fondo sólido y tipografía marcada */
+.mg-toolbar {
+  --background: var(--mg-primary);
+  --color: #fff;
+  --border-width: 0;
+  box-shadow: 0 4px 12px rgba(255,122,61,.25);
+}
+
+.mg-card {
+  background: var(--mg-surface);
+  border-radius: 20px;
+  box-shadow: var(--mg-shadow);
+  overflow: hidden;
+}
+
+ion-card-title {
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: var(--mg-ink);
+}
+
+ion-card-subtitle {
+  color: var(--mg-muted);
+}
+
+/* Key-value lines */
+.mg-kv {
+  margin: 6px 0;
+  color: var(--mg-ink);
+  strong {
+    color: var(--mg-ink);
+  }
+  span {
+    color: var(--mg-muted);
+  }
+}
+
+/* Divider item */
+.mg-line {
+  --background: #fff;
+  --border-color: #f1e5dd;
+  --inner-padding-bottom: 8px;
+  --inner-padding-top: 8px;
+}
+
+/* Badge de plan */
+.mg-badge {
+  --background: var(--mg-primary);
+  --color: #fff;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: .2px;
+}
+.mg-badge-muted {
+  --background: #e2e8f0;
+  --color: #475569;
+}
+
+/* Campos de formulario */
+.mg-field {
+  --background: #fff;
+  --color: var(--mg-ink);
+  --highlight-color-valid: var(--mg-primary);
+  --highlight-color-invalid: #e11d48;
+  margin-bottom: 8px;
+
+  ion-input, ion-select {
+    --background: #f6fafc;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    border-radius: 14px;
+    border: 1px solid #eef2f6;
+    transition: box-shadow .2s, border-color .2s;
+  }
+
+  /* focus ring */
+  ion-input.has-focus,
+  ion-select.has-focus {
+    box-shadow: 0 0 0 4px var(--mg-ring);
+    border-color: var(--mg-primary-600);
+  }
+
+  ion-label {
+    color: var(--mg-muted);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+}
+
+/* Botones */
+.mg-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.mg-btn {
+  --background: var(--mg-primary);
+  --background-activated: var(--mg-primary-600);
+  --background-focused: var(--mg-primary);
+  --color: #fff;
+  --border-radius: 14px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  box-shadow: 0 6px 14px rgba(255,122,61,.25);
+}
+
+.mg-btn-outline {
+  --color: var(--mg-primary);
+  --border-color: var(--mg-primary);
+  --background: #fff;
+  --border-radius: 14px;
+  font-weight: 700;
+}
+
+.mg-btn-ghost {
+  --color: #6b7280;
+  --border-radius: 14px;
+  font-weight: 700;
+}
+
+/* Bloque edición */
+.mg-edit {
+  margin-top: 6px;
+  padding-top: 8px;
+}

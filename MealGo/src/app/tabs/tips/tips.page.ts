@@ -55,7 +55,7 @@ export class TipsPage {
         data = await this.db.getAll(tabla);
       }
 
-      // 🧹 Normalización + filtro client-side de seguridad
+      // Normalización + filtro client-side de seguridad
       this.tipsOriginal = (data || [])
         .map(t => ({
           id_tip: t.id_tip ?? t.id ?? null,
@@ -63,7 +63,7 @@ export class TipsPage {
           categoria: ((t.categoria || '').trim() || 'DEFAULT').toUpperCase(),
           descripcion: (t.descripcion || '').trim(),
         }))
-        .filter(t => CATS.includes(t.categoria)); // 👈 acá se descartan los sin categoría
+        .filter(t => CATS.includes(t.categoria)); // acá se descartan los sin categoría
 
       this.aplicarFiltros();
     } catch (e) {
@@ -102,7 +102,7 @@ export class TipsPage {
     this.tips = lista.sort((a, b) => a.titulo.localeCompare(b.titulo));
   }
 
-  // 🎨 Helpers UI
+  // Helpers UI
   getEmoji(value: string) {
     return this.categorias.find(c => c.value === value)?.emoji || '📝';
   }

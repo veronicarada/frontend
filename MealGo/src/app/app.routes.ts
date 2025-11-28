@@ -41,7 +41,7 @@ export const routes: Routes = [
       },
        {
         path: 'usuario',
-        loadComponent: () => import('./tabs/usuario/usuario.page').then(m => m.UsuarioPage)
+        loadComponent: () => import('./tabs/usuario/usuarios.page').then(m => m.UsuariosPage)
       },
       {
         path: '',

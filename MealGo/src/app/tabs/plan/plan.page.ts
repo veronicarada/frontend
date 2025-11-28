@@ -134,7 +134,7 @@ export class PlanPage implements OnInit {
     }
   }
 
-  async cargarPlanes() {
+  async cargarPlanes() { 
     if (!this.userId) return;
     try {
       const { data, error } = await supabase

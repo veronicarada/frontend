@@ -1,100 +1,141 @@
 <ion-header>
   <ion-toolbar class="mg-toolbar">
     <ion-title>Recetas</ion-title>
-    <ion-buttons slot="end" *ngIf="detalleMode">
-      <ion-button (click)="cancelarEdicion()">Ver todas</ion-button>
+    <ion-buttons slot="end">
+      <ion-button class="mg-outline" (click)="toggleFavoritas()">
+        <ion-icon [name]="verSoloFavoritas ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+        {{ verSoloFavoritas ? 'VER TODAS' : 'VER FAVORITAS' }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="mg-bg ion-padding">
 
-  <!-- Refrescar -->
+  <!-- Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Botón ver favoritas -->
-  <ion-button expand="block" fill="outline" (click)="toggleFavoritas()">
-    <ion-icon [name]="verSoloFavoritas ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
-    {{ verSoloFavoritas ? 'Ver todas' : 'Ver favoritas' }}
-  </ion-button>
+  <!-- Buscador -->
+  <ion-item class="mg-search" lines="none">
+    <ion-icon name="search" slot="start"></ion-icon>
+    <ion-input
+      placeholder="Buscar por nombre, dificultad o instrucciones"
+      [(ngModel)]="filtro"
+      (ionInput)="onBuscarChange()">
+    </ion-input>
+  </ion-item>
 
-  <!-- ====== FORM ====== -->
-  <ion-card class="mg-card">
+  <!-- ===== Formulario (arriba) ===== -->
+  <ion-card class="mg-form">
     <ion-card-header>
-      <ion-card-title>{{ editando ? 'Editar receta' : 'Nueva receta' }}</ion-card-title>
+      <ion-card-title>{{ form.id_receta ? 'Editar receta' : 'Nueva receta' }}</ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      <form (ngSubmit)="guardar()">
-        <ion-item class="mg-field">
-          <ion-label position="stacked">Nombre *</ion-label>
-          <ion-input [(ngModel)]="form.nombre" name="nombre" required></ion-input>
+
+    <ion-card-content class="mg-form-grid">
+      <ion-item class="mg-field" lines="none">
+        <ion-label position="stacked">Nombre *</ion-label>
+        <ion-input [(ngModel)]="form.nombre"></ion-input>
+      </ion-item>
+
+      <ion-item class="mg-field" lines="none">
+        <ion-label position="stacked">Instrucciones *</ion-label>
+        <ion-textarea autoGrow="true" rows="3" [(ngModel)]="form.instrucciones"></ion-textarea>
+      </ion-item>
+
+      <div class="mg-two">
+        <ion-item class="mg-field" lines="none">
+          <ion-label position="stacked">Tiempo (min)</ion-label>
+          <ion-input type="number" [(ngModel)]="form.tiempo_preparacion_min"></ion-input>
         </ion-item>
 
-        <ion-item class="mg-field">
-          <ion-label position="stacked">Instrucciones *</ion-label>
-          <ion-textarea [(ngModel)]="form.instrucciones" name="instrucciones" rows="6"></ion-textarea>
-        </ion-item>
-
-        <div class="mg-grid">
-          <ion-item class="mg-field">
-            <ion-label position="stacked">Tiempo (min)</ion-label>
-            <ion-input type="number" [(ngModel)]="form.tiempo_preparacion_min" name="tiempo_preparacion_min"></ion-input>
-          </ion-item>
-
-          <ion-item class="mg-field">
-            <ion-label position="stacked">Dificultad</ion-label>
-            <ion-select [(ngModel)]="form.dificultad" name="dificultad" interface="popover">
-              <ion-select-option value="Fácil">Fácil</ion-select-option>
-              <ion-select-option value="Media">Media</ion-select-option>
-              <ion-select-option value="Difícil">Difícil</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </div>
-
-        <ion-item class="mg-field">
-          <ion-label position="stacked">Ingredientes</ion-label>
-          <ion-select [(ngModel)]="form.ingredientesIds" multiple="true" interface="popover" name="ingredientesIds">
-            <ion-select-option *ngFor="let ing of ingredientesDisponibles" [value]="ing.id_ingrediente">
-              {{ ing.nombre }}
-            </ion-select-option>
+        <ion-item class="mg-field" lines="none">
+          <ion-label position="stacked">Dificultad</ion-label>
+          <ion-select placeholder="Seleccionar" [(ngModel)]="form.dificultad">
+            <ion-select-option value="Fácil">Fácil</ion-select-option>
+            <ion-select-option value="Media">Media</ion-select-option>
+            <ion-select-option value="Difícil">Difícil</ion-select-option>
           </ion-select>
         </ion-item>
+      </div>
 
-        <ion-button expand="block" class="mg-cta" type="submit">
-          {{ editando ? 'Guardar cambios' : 'Agregar' }}
+      <!-- Ingredientes (múltiple) -->
+      <ion-item class="mg-field" lines="none">
+        <ion-label position="stacked">Ingredientes (de tu despensa)</ion-label>
+        <ion-select
+          placeholder="Seleccioná al menos uno"
+          [multiple]="true"
+          interface="popover"
+          [(ngModel)]="ingredientesSeleccionados">
+          <ion-select-option *ngFor="let ing of ingredientes" [value]="ing.id_ingrediente">
+            {{ ing.nombre }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <div class="mg-actions">
+        <ion-button color="primary" (click)="guardar()">
+          <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+          {{ form.id_receta ? 'GUARDAR CAMBIOS' : 'AGREGAR' }}
         </ion-button>
-        <ion-button expand="block" fill="outline" color="medium" (click)="cancelarEdicion()" *ngIf="editando">
-          Cancelar edición
+        <ion-button fill="clear" color="medium" (click)="cancelar()" *ngIf="editando || form.id_receta">
+          Cancelar
         </ion-button>
-      </form>
+      </div>
     </ion-card-content>
   </ion-card>
 
-  <!-- ====== LISTA ====== -->
-  <ion-list>
-    <ion-item-sliding *ngFor="let r of recetasFiltradas">
-      <ion-item>
-        <ion-label>
-          <h2>{{ r.nombre }}</h2>
-          <p>{{ r.dificultad || '—' }} · {{ r.tiempo_preparacion_min ? (r.tiempo_preparacion_min + ' min') : '—' }}</p>
-        </ion-label>
-        <ion-buttons slot="end">
-          <ion-button fill="clear" (click)="editar(r)">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-          <ion-button fill="clear" color="danger" (click)="eliminar(r)">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
+  <!-- ===== Listado ===== -->
+  <ion-grid class="mg-list">
+    <ion-row>
+      <ion-col size="12" sizeMd="6" sizeLg="6" *ngFor="let r of recetasFiltradas">
+        <ion-card class="mg-card">
+          <ion-card-header>
+            <ion-card-title>{{ r.nombre }}</ion-card-title>
+          </ion-card-header>
 
-      <ion-item-options side="end">
-        <ion-item-option (click)="editar(r)">Editar</ion-item-option>
-        <ion-item-option color="danger" (click)="eliminar(r)">Eliminar</ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+          <ion-card-content>
+            <div class="mg-chips">
+              <ion-chip [class]="chipClase(r.dificultad)">
+                <ion-label>Dificultad {{ r.dificultad || '—' }}</ion-label>
+              </ion-chip>
 
+              <ion-chip class="time">
+                <ion-icon name="time-outline"></ion-icon>
+                <ion-label>{{ r.tiempo_preparacion_min || '—' }} min</ion-label>
+              </ion-chip>
+
+              <ion-button size="small" fill="outline" class="mg-rate" (click)="calificarCinco(r, $event)">
+                <ion-icon name="star" slot="start"></ion-icon>
+                CALIFICAR 5
+              </ion-button>
+
+              <ion-button size="small" fill="clear" class="mg-heart" (click)="toggleFavorita(r, $event)">
+                <ion-icon [name]="esFavorita(r) ? 'heart' : 'heart-outline'"></ion-icon>
+              </ion-button>
+            </div>
+
+            <p class="mg-desc">{{ r.instrucciones }}</p>
+
+<div *ngIf="r.ingredientes_nombres?.length" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+  <ion-chip *ngFor="let n of r.ingredientes_nombres" class="dif-otra">
+    <ion-label>{{ n }}</ion-label>
+  </ion-chip>
+</div>
+
+            <!--Botones -->
+            <div class="mg-actions-row">
+              <ion-button size="small" class="mg-btn mg-edit" (click)="editar(r, $event)">
+                <ion-icon slot="start" name="pencil"></ion-icon>
+              </ion-button>
+              <ion-button size="small" class="mg-btn mg-del" (click)="eliminar(r, $event)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

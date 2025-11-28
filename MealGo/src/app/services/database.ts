@@ -245,4 +245,160 @@ export class DatabaseService {
 
     return { ok: true };
   }
+  // ======= Extras necesarios para Recetas =======
+
+// Buscar por igualdad (tabla/columna/valor)
+async selectEq(table: string, col: string, value: any) {
+  const { data, error } = await supabase.from(table).select('*').eq(col, value);
+  if (error) throw error;
+  return data || [];
+}
+
+// Delete con 2 columnas (útil para favoritos PK compuesta)
+async deleteBy2(table: string, col1: string, val1: any, col2: string, val2: any) {
+  const { error } = await supabase.from(table).delete().eq(col1, val1).eq(col2, val2);
+  if (error) throw error;
+}
+
+// Obtener id_usuario (tu tabla) a partir del usuario logueado (auth)
+async getCurrentUsuarioId(): Promise<string | null> {
+  const { data: auth } = await supabase.auth.getUser();
+  const email = auth?.user?.email;
+  if (!email) return null;
+
+  const { data, error } = await supabase
+    .from('usuario')
+    .select('id_usuario')
+    .eq('email', email)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data?.id_usuario ?? null;
+}
+// Traer recetas + ingredientes (para listar en el tab)
+async getRecetasConIngredientes() {
+  const { data, error } = await supabase
+    .from('receta')
+    .select(`
+      id_receta,
+      nombre,
+      instrucciones,
+      tiempo_preparacion_min,
+      dificultad,
+      fecha_creacion,
+      receta_ingrediente (
+        ingrediente:ingrediente ( id_ingrediente, nombre )
+      )
+    `)
+    .order('fecha_creacion', { ascending: false });
+
+  if (error) throw error;
+  return data || [];
+}
+ async getUsuarios() {
+    const { data, error } = await supabase
+      .from('usuario')
+      .select('*')
+      .order('fecha_creacion', { ascending: false });
+    return { data, error };
+  }
+
+  async insertUsuario(newUser: any) {
+    const { data, error } = await supabase
+      .from('usuario')
+      .insert([{
+        nombre: newUser.nombre,
+        email: newUser.email,
+        contrasenia: newUser.contrasenia, // coincide con tu columna
+        telefono: newUser.telefono || null,
+      }])
+      .select()
+      .single();
+    return { data, error };
+  }
+
+  // =========================================
+  // SUSCRIPCIONES
+  // =========================================
+  async getSuscripciones() {
+    const { data, error } = await supabase
+      .from('suscripcion')
+      .select('*')
+      .order('nombre', { ascending: true });
+      console.log('[getSuscripciones] error:', error);
+  console.log('[getSuscripciones] data:', data); // ← debería ser un array con objetos
+    return { data, error };
+  }
+
+  // Suscripción activa actual (si existe)
+  async getSuscripcionActiva(id_usuario: string) {
+    const { data, error } = await supabase
+      .from('usuario_suscripcion')
+      .select('id_suscripcion, estado, fecha_inicio, fecha_cierre')
+      .eq('id_usuario', id_usuario)
+      .eq('estado', 'activa')
+      .is('fecha_cierre', null)
+      .order('fecha_inicio', { ascending: false })
+      .limit(1)
+      .maybeSingle(); // devuelve null si no hay
+    return { data, error };
+  }
+
+  // Activar (o cambiar) una suscripción: inserta una fila activa con fecha_inicio = hoy
+async activarSuscripcion(id_usuario: string, id_suscripcion: string) {
+  const hoy = new Date().toISOString().slice(0, 10); // 'YYYY-MM-DD'
+
+  // 1) Si existe una fila de HOY para este usuario y plan, la "reabrimos":
+  //    estado = 'activa' y fecha_cierre = null (evita PK duplicada)
+  const { data: existHoy, error: eExist } = await supabase
+    .from('usuario_suscripcion')
+    .select('id_usuario, id_suscripcion, fecha_inicio, estado, fecha_cierre')
+    .eq('id_usuario', id_usuario)
+    .eq('id_suscripcion', id_suscripcion)
+    .eq('fecha_inicio', hoy)
+    .maybeSingle();
+
+  if (eExist) return { data: null, error: eExist };
+
+  if (existHoy) {
+    const { data, error } = await supabase
+      .from('usuario_suscripcion')
+      .update({ estado: 'activa', fecha_cierre: null })
+      .eq('id_usuario', id_usuario)
+      .eq('id_suscripcion', id_suscripcion)
+      .eq('fecha_inicio', hoy)
+      .select()
+      .single();
+
+    return { data, error };
+  }
+
+  // 2) Si no existe fila de HOY, insertamos una nueva
+  const { data, error } = await supabase
+    .from('usuario_suscripcion')
+    .insert([{
+      id_usuario,
+      id_suscripcion,
+      fecha_inicio: hoy,
+      estado: 'activa',
+      // fecha_cierre null por defecto
+    }])
+    .select()
+    .single();
+
+  return { data, error };
+}
+
+
+  // Cerrar suscripción activa (si la hay)
+  async cerrarSuscripcionActiva(id_usuario: string) {
+    const hoy = new Date().toISOString().slice(0, 10);
+    const { data, error } = await supabase
+      .from('usuario_suscripcion')
+      .update({ estado: 'cerrada', fecha_cierre: hoy })
+      .eq('id_usuario', id_usuario)
+      .eq('estado', 'activa')
+      .is('fecha_cierre', null);
+    return { data, error };
+  }
 }

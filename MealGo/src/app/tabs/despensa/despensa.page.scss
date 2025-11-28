@@ -1,6 +1,6 @@
 /* Fondo suave degradé MealGo */
 .mg-bg {
-  --background: linear-gradient(180deg, #ffe7dc 0%, #fff7f1 60%, #ffffff 100%);
+   --background: linear-gradient(180deg, hsl(30, 96%, 80%) 0%, #ffdec2 45%);
 }
 
 /* Toolbar */
@@ -103,3 +103,4 @@ ion-modal {
 
 /* Acciones del form */
 .actions { margin-top: 6px; }
+

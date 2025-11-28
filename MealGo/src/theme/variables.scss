@@ -1,2 +1,104 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+/* ====== MealGo Theme – variables.scss ====== */
+
+/* Tipografía global */
+:root {
+  --ion-font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+/* Paleta cálida, sin azules */
+:root {
+  /* Base */
+  --mg-bg: #FFF8F1;         /* crema cálido */
+  --mg-surface: #FFFFFF;    /* blanco puro */
+  --mg-text: #2E2A27;       /* texto principal */
+  --mg-text-muted: #6F6B69; /* texto secundario */
+
+  /* Naranja (Primary) */
+  --mg-orange: #FF914D;
+  --mg-orange-tint: #FFB98A;
+  --mg-orange-shade: #E87731;
+
+  /* Verdecito menta (Success/Accent) */
+  --mg-mint: #53D1B6;
+  --mg-mint-tint: #78E0C9;
+  --mg-mint-shade: #35B69B;
+
+  /* Rosita (Tertiary/Info suave) */
+  --mg-rose: #FF9FB6;
+  --mg-rose-tint: #FFC6D3;
+  --mg-rose-shade: #E27C95;
+
+  /* Amarillo durazno (Warn suave) */
+  --mg-peach: #FFD3A8;
+  --mg-peach-shade: #E4B98F;
+
+  /* Grises cálidos */
+  --mg-line: #F1E7DE;
+  --mg-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+
+/* ====== Mapear a colores Ionic ====== */
+:root {
+  --ion-color-primary: var(--mg-orange);
+  --ion-color-primary-rgb: 255,145,77;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: var(--mg-orange-shade);
+  --ion-color-primary-tint: var(--mg-orange-tint);
+
+  --ion-color-secondary: var(--mg-mint);
+  --ion-color-secondary-rgb: 83,209,182;
+  --ion-color-secondary-contrast: #0f0f0f;
+  --ion-color-secondary-contrast-rgb: 15,15,15;
+  --ion-color-secondary-shade: var(--mg-mint-shade);
+  --ion-color-secondary-tint: var(--mg-mint-tint);
+
+  --ion-color-tertiary: var(--mg-rose);
+  --ion-color-tertiary-rgb: 255,159,182;
+  --ion-color-tertiary-contrast: #0f0f0f;
+  --ion-color-tertiary-contrast-rgb: 15,15,15;
+  --ion-color-tertiary-shade: var(--mg-rose-shade);
+  --ion-color-tertiary-tint: var(--mg-rose-tint);
+
+  --ion-color-success: var(--mg-mint);
+  --ion-color-warning: var(--mg-peach);
+  --ion-color-danger: #F26565; /* rojo cálido */
+  --ion-color-medium: #A5968A; /* gris cálido medio */
+  --ion-color-light: #F9F3EE;  /* crema más claro */
+}
+
+/* Fondo y texto */
+:root {
+  --ion-background-color: var(--mg-bg);
+  --ion-background-color-rgb: 255,248,241;
+
+  --ion-text-color: var(--mg-text);
+  --ion-text-color-rgb: 46,42,39;
+
+  --ion-toolbar-background: var(--mg-surface);
+  --ion-toolbar-color: var(--mg-text);
+
+  --ion-item-background: var(--mg-surface);
+  --ion-card-background: var(--mg-surface);
+}
+
+/* Tabs y TabBar */
+:root {
+  --ion-tab-bar-background: var(--mg-surface);
+  --ion-tab-bar-border-color: var(--mg-line);
+  --ion-tab-bar-color: var(--mg-text-muted);
+  --ion-tab-bar-color-selected: var(--mg-orange);
+}
+
+/* Inputs y focus */
+:root {
+  --highlight-color-focused: var(--mg-orange);
+  --ion-color-step-50: #fdf7f1;
+  --ion-color-step-100: #f8efe6;
+}
+
+/* Eliminá cualquier azul heredado */
+:root {
+  --ion-color-step-850: #3a3431;
+  --ion-color-step-900: #2e2a27;
+}

@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar color="primary" class="mg-toolbar">
+    <ion-title>Gestión de Usuarios</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding mg-bg">
+
+  <!-- 👤 FORMULARIO: ALTA DE USUARIO -->
+  <ion-card class="mg-card">
+    <ion-card-header>
+      <ion-card-title>Agregar nuevo usuario</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item class="mg-field">
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="newUser.nombre" placeholder="Ej: Juan Pérez"></ion-input>
+      </ion-item>
+
+      <ion-item class="mg-field">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="newUser.email" type="email" placeholder="Ej: juan@mail.com"></ion-input>
+      </ion-item>
+
+      <ion-item class="mg-field">
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input [(ngModel)]="newUser.contrasenia" type="password" placeholder="••••••••"></ion-input>
+      </ion-item>
+
+      <ion-item class="mg-field">
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input [(ngModel)]="newUser.telefono" placeholder="Ej: +54 9 11 5555-5555"></ion-input>
+      </ion-item>
+
+      <!-- 🟠 Plan inicial (opcional) -->
+      <ion-item class="mg-field">
+        <ion-label position="stacked">Plan inicial (opcional)</ion-label>
+        <ion-select [(ngModel)]="selectedPlanNew" interface="popover" placeholder="Elegí un plan">
+          <ion-select-option *ngFor="let p of suscripciones" [value]="p.id_suscripcion">
+            {{ p.nombre }} — $ {{ p.precio_mensual }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-button expand="block" color="primary" class="mg-btn" (click)="addUser()">
+        Guardar Usuario
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- ⏳ CARGA -->
+  <div class="ion-text-center" *ngIf="loading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <!-- 📋 LISTA DE USUARIOS -->
+  <ion-card *ngFor="let user of usuarios" class="mg-card">
+    <ion-card-header>
+      <ion-card-title>{{ user.nombre }}</ion-card-title>
+      <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p class="mg-kv"><strong>Teléfono:</strong> <span>{{ user.telefono || 'Sin teléfono' }}</span></p>
+      <p class="mg-kv"><strong>Fecha creación:</strong> <span>{{ user.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</span></p>
+
+      <ion-item lines="full" class="mg-line">
+        <ion-label>Suscripción actual</ion-label>
+        <ion-badge slot="end" class="mg-badge" [class.mg-badge-muted]="!activaPorUsuario[user.id_usuario]">
+          {{ planName(activaPorUsuario[user.id_usuario]?.id_suscripcion) || 'Sin suscripción activa' }}
+        </ion-badge>
+      </ion-item>
+
+      <div class="mg-actions">
+        <ion-button size="small" fill="outline" class="mg-btn-outline" (click)="toggleEdit(user.id_usuario)">
+          {{ editMode[user.id_usuario] ? 'Cancelar' : 'Editar' }}
+        </ion-button>
+      </div>
+
+      <div *ngIf="editMode[user.id_usuario]" class="mg-edit">
+        <ion-item class="mg-field">
+          <ion-label position="stacked">Cambiar / Activar suscripción</ion-label>
+          <ion-select
+            interface="popover"
+            placeholder="Elegí un plan"
+            [ngModel]="selectedPlanPorUsuario[user.id_usuario]"
+            (ngModelChange)="onPlanChange(user.id_usuario, $event)">
+            <ion-select-option *ngFor="let p of suscripciones" [value]="p.id_suscripcion">
+              {{ p.nombre }} — $ {{ p.precio_mensual }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="mg-actions">
+          <ion-button size="small" color="primary" class="mg-btn" (click)="activarPlan(user.id_usuario)" [disabled]="!selectedPlanPorUsuario[user.id_usuario]">
+            Activar / Actualizar
+          </ion-button>
+          <ion-button size="small" fill="clear" class="mg-btn-ghost" (click)="cerrarPlan(user.id_usuario)" [disabled]="!activaPorUsuario[user.id_usuario]">
+            Cerrar suscripción
+          </ion-button>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

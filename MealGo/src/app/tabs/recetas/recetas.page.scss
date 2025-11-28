@@ -1,146 +1,213 @@
+/* ===== Paleta MealGo minimal ===== */
 :host {
-  --mg-coral: #FF7E5F;
-  --mg-peach: #FEB47B;
-  --mg-ink: #1F2328;
-  --mg-muted: #6B6B6B;
-  --font-mealgo: 'BBH Sans Hegarty', 'Poppins', system-ui, sans-serif;
-  font-family: var(--font-mealgo);
+  --mg-primary: #ff7a3d;        /* naranja protagonista */
+  --mg-primary-600: #ff6a26;
+  --mg-primary-50: #fff1e8;     /* suaves */
+  --mg-accent: #2e57aa;         /* azul sutil para acciones secundarias */
+  --mg-danger: #e2493d;         /* rojo suave */
+  --mg-danger-50: #fde8e6;
+  --mg-ink: #0f172a;            /* texto principal */
+  --mg-ink-600: #334155;        /* texto secundario */
+  --mg-ink-400: #64748b;
+  --mg-card: #ffffff;
+  --mg-shadow: 0 10px 28px rgba(15, 23, 42, .06);
 }
 
-/* ===== Fondo degradé ===== */
+/* ===== Fondo degradé muy leve ===== */
 .mg-bg {
-  --background: linear-gradient(180deg, #FFD7C7 0%, #FFE7CF 45%, #FFF3E3 100%);
-  position: relative;
+  --background: linear-gradient(180deg, hsl(30, 96%, 80%) 0%, #ffdec2 45%);
 }
 
-/* ===== Header ===== */
-ion-toolbar {
-  --background: rgba(255,255,255,.8);
-  backdrop-filter: saturate(1.2) blur(8px);
+/* ===== Toolbar ===== */
+.mg-toolbar {
+  --background: #fff;
   --color: var(--mg-ink);
-  border-bottom: 1px solid rgba(0,0,0,.05);
+  font-weight: 800;
+  box-shadow: 0 2px 16px rgba(15, 23, 42, .06);
 }
-ion-title { font-weight: 800; letter-spacing: .3px; }
 
-/* ===== Buscador pill ===== */
+/* Botón “VER FAVORITAS” discreto */
+.mg-outline {
+  --border-width: 1.5px;
+  --border-color: var(--mg-accent);
+  --color: var(--mg-accent);
+  --background: transparent;
+  border-radius: 12px;
+}
+
+/* ===== Buscador ===== */
 .mg-search {
-  margin: 10px auto 16px;
-  max-width: 860px;
+  margin: 14px 0 18px;
+  border-radius: 16px;
   --background: #fff;
-  border-radius: 999px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
-}
-.mg-search ion-input { font-weight: 600; color: var(--mg-ink); }
-
-/* ===== Card formulario ===== */
-.mg-form-card {
-  margin: 8px auto 18px;
-  max-width: 860px;
-  border-radius: 20px;
-  background: #fffaf5;
-  box-shadow: 0 12px 30px rgba(255, 126, 95, .18);
-}
-ion-card-title { color: var(--mg-coral); font-weight: 800; letter-spacing: .2px; }
-
-/* Inputs */
-.mg-input {
-  --background: #fdfcfc;
-  border-radius: 14px;
-  margin-bottom: 14px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.06);
-  --highlight-color-focused: var(--mg-coral);
-  --min-height: 70px;
-}
-ion-label { color: var(--mg-muted); font-weight: 600; }
-ion-input, ion-textarea, ion-select {
-  font-size: 15px;
-  color: var(--mg-ink);
-  font-weight: 600;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  --min-height: 46px;
+  box-shadow: var(--mg-shadow);
+  ion-icon { opacity: .55; }
 }
 
-.mg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-/* Botones */
-.btns { margin-top: 10px; display: grid; gap: 8px; }
-.mg-cta {
-  --background: linear-gradient(45deg, var(--mg-coral), var(--mg-peach));
-  --box-shadow: 0 8px 20px rgba(255, 126, 95, .35);
-  border-radius: 14px;
-  height: 48px;
-  font-weight: 800; letter-spacing: .2px;
-}
-
-/* ===== Listado ===== */
-.mg-list { max-width: 920px; margin: 0 auto 28px; background: transparent; }
-
-/* Tarjeta receta */
-.mg-recipe {
-  --background: #fff;
+/* ===== Formulario ===== */
+.mg-form {
   border-radius: 18px;
-  margin: 12px 6px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.08);
-  padding: 8px 6px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  box-shadow: var(--mg-shadow);
+
+  ion-card-header {
+    background: var(--mg-primary-50);
+    color: var(--mg-primary-600);
+    font-weight: 800;
+  }
+}
+.mg-form-grid { padding-top: 6px; }
+
+.mg-field {
+  --background: #fff;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, .04);
 }
 
-/* Cabecera de receta */
-.mg-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.mg-title {
-  margin: 0; font-size: 1.25rem; font-weight: 900;
-  color: var(--mg-ink); letter-spacing: .2px;
+.mg-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-/* Botones redondos de acción */
-.mg-icon-btn {
-  --padding-start: 6px; --padding-end: 6px;
-  --background: #fff3ef;
-  --box-shadow: 0 4px 12px rgba(255, 126, 95, .25);
-  border-radius: 999px; --color: var(--mg-coral); color: var(--mg-coral);
-  min-width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
-}
-.mg-icon-btn.danger { --background: #ffe9e9; }
+.mg-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
 
-/* Meta (chips) */
-.mg-meta { display: flex; align-items: center; gap: 10px; margin: 6px 2px 4px; }
-
-/* Chip dificultad */
-.mg-chip { height: 26px; font-weight: 800; border-radius: 999px; --background: rgba(96,200,120,.12); --color: #2a7a49; }
-.mg-chip.easy { --background: rgba(96,200,120,.14); --color: #2a7a49; }
-.mg-chip.med  { --background: rgba(254,180,123,.18); --color: #A45A00; }
-.mg-chip.hard { --background: rgba(255,0,0,.18); --color: #d41010; }
-
-/* Badge */
-.mg-badge {
-  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
-  border-radius: 999px; font-weight: 800; font-size: .82rem; color: #9B5600;
-  background: rgba(254,180,123,.22);
+  ion-button {
+    --background: var(--mg-primary);
+    --background-hover: var(--mg-primary-600);
+    --color: #fff;
+    --box-shadow: 0 6px 14px rgba(255, 122, 61, .22);
+    border-radius: 12px;
+    font-weight: 800;
+  }
 }
 
-/* Etiquetas e ingredientes */
-.mg-tags { display:flex; flex-wrap:wrap; gap:6px; margin: 6px 2px; }
+/* ===== Cards ===== */
+.mg-list { margin-top: 8px; }
 
-/* Calificar */
-.mg-rate { margin: 6px 2px; }
+.mg-card {
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--mg-card);
+  box-shadow: var(--mg-shadow);
+  padding-bottom: 2px; /* para sombra pareja */
+}
 
-/* Descripción */
+.mg-card ion-card-title {
+  font-weight: 900;
+  letter-spacing: .2px;
+  color: var(--mg-ink);
+}
+
+/* Chips y acciones superiores (dificultad/tiempo/calificar/fav) */
+.mg-chips {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+
+  ion-chip {
+    --color: var(--mg-ink);
+    background: var(--mg-primary-50);
+    border-radius: 999px;
+    font-weight: 700;
+  }
+
+  .time {
+    background: #f3efe8;
+  }
+
+  /* Botón calificar: outline azul suave */
+  .mg-rate {
+    --background: #fff;
+    --border-color: var(--mg-accent);
+    --color: var(--mg-accent);
+    --ripple-color: var(--mg-accent);
+    border-radius: 12px;
+    font-weight: 800;
+  }
+
+  /* Corazón con cápsula suave */
+  .mg-heart {
+    --color: var(--mg-danger);
+    background: var(--mg-danger-50);
+    border-radius: 12px;
+  }
+}
+
+/* Dificultad con colores suaves y elegantes */
+.dif-facil  { background: #e8f5eb !important; --color: #0a7f3f !important; font-weight: 800; }
+.dif-media  { background: #fff1cc !important; --color: #9a6b00 !important; font-weight: 800; }
+.dif-dificil{ background: #ffe4e4 !important; --color: #b91c1c !important; font-weight: 800; }
+.dif-otra   { background: #eef2ff !important; --color: #044f7be5 !important; font-weight: 800; }
+
 .mg-desc {
-  margin: 6px 2px 4px; color: #3b3b3b; line-height: 1.45; white-space: pre-wrap;
-  font-weight: 600; font-size: .98rem;
+  color: var(--mg-ink-600);
+  line-height: 1.5rem;
+  white-space: pre-wrap;
+  margin: 8px 0 14px;
+  font-size: 0.98rem;
 }
 
-/* Nota vacío */
-ion-note { display: block; text-align: center; margin-top: 18px; color: var(--mg-muted); }
+/* ===== Botones Editar / Borrar delicados (como 2da imagen) ===== */
+.mg-actions-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-/* Transiciones */
-ion-item, ion-card, ion-button { transition: all .18s ease; }
-.mg-recipe:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,.10); }
+.mg-btn {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --border-radius: 12px;
+  --box-shadow: 0 6px 14px rgba(15, 23, 42, .06);
+  font-weight: 800;
+}
 
-/* Lupita buscador */
-.mg-search ion-icon[slot="start"] { color: var(--mg-muted); font-size: 20px; margin-right: 4px; }
+/* Editar: azul suave, relleno claro */
+.mg-edit {
+  --background: #ecf3ff;          /* fondo suave */
+  --color: #9de462;               /* texto/icono */
+  --ripple-color: #6b9c00;
+  --background-hover: #e1ecff;
+  border: 1px solid #d2e2ff;
+}
 
-/* Fuerza color iconos en botones */
-.mg-icon-btn { --color: var(--mg-coral); color: var(--mg-coral); }
-.mg-icon-btn ion-icon { font-size: 18px; }
-.mg-icon-btn.danger { --color: #d64545; color: #d64545; --background: #ffecec; }
-.mg-icon-btn.danger ion-icon { font-size: 18px; }
+/* Borrar: rojo coral suave (no chillón) */
+.mg-del {
+  --background: #ffecec;
+  --color: var(--mg-danger);
+  --ripple-color: var(--mg-danger);
+  --background-hover: #ffe1e1;
+  border: 1px solid #ffd0d0;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .mg-two { grid-template-columns: 1fr; }
+}
+.mg-btn::part(native) {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Evitar el contorno azul de foco */
+.mg-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* También quita el borde de los ion-buttons outline internos */
+ion-button.mg-btn::part(native) {
+  border-width: 0 !important;
+}
