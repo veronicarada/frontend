@@ -1,5 +1,5 @@
 /*
- * App Global CSS
+ * App Global CSS - MealGo
  * ----------------------------------------------------------------------------
  */
 
@@ -29,20 +29,36 @@
    MealGo Global Styles
    =========================== */
 
-/* Reset y suavidad */
-* { -webkit-tap-highlight-color: transparent; }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto !important; 
+  overflow-x: hidden;
+}
 
-html, body, ion-app {
+/* 2. ASEGURAR INTERACCIÓN */
+ion-app {
+  height: 100%;
+  position: relative;
+}
+
+/* Fuerza que el contenido sea interactuable */
+ion-content {
+  --overflow: auto !important;
+  overflow-y: auto !important;
+  position: relative !important;
+  pointer-events: auto !important;
+}
+
+
+body {
   font-family: var(--ion-font-family);
   background: var(--ion-background-color);
   color: var(--ion-text-color);
-  /* Aseguramos altura completa para evitar bloqueos */
-  height: 100%; 
-  margin: 0;
-  padding: 0;
 }
 
-/* Fondo degradado suave para páginas */
+/* Fondo degradado suave */
 .mg-bg,
 ion-content.mg-bg {
   --background: radial-gradient(1200px 800px at 90% -10%, rgba(255, 201, 150, 0.14), transparent 60%),
@@ -50,7 +66,7 @@ ion-content.mg-bg {
                  var(--mg-bg);
 }
 
-/* ====== Componentes base ====== */
+/* Toolbar */
 ion-toolbar.mg-toolbar {
   --background: var(--mg-surface);
   --color: var(--mg-text);
@@ -59,25 +75,17 @@ ion-toolbar.mg-toolbar {
   --border-style: solid;
 }
 
-ion-content {
-  --overflow: auto;
-}
-
+/* Botones */
 ion-button {
   --border-radius: 16px;
   --box-shadow: var(--mg-shadow);
   --padding-top: 12px;
   --padding-bottom: 12px;
-  --padding-start: 16px;
-  --padding-end: 16px;
   font-weight: 600;
-  letter-spacing: .2px;
-  transition: transform .08s ease, filter .2s ease;
+  transition: transform .08s ease;
 }
-ion-button:hover { filter: brightness(1.03); }
-ion-button:active { transform: translateY(1px) scale(0.99); }
+ion-button:active { transform: scale(0.98); }
 
-/* Variante outline “MealGo” */
 .mg-outline {
   --background: transparent;
   --color: var(--mg-orange);
@@ -88,121 +96,45 @@ ion-button:active { transform: translateY(1px) scale(0.99); }
 }
 
 /* Tarjetas */
-ion-card,
-.mg-card {
+ion-card, .mg-card {
   border-radius: 22px;
   box-shadow: var(--mg-shadow);
   border: 1px solid var(--mg-line);
   background: var(--mg-surface);
 }
-ion-card-header { padding-bottom: 6px; }
-ion-card-title { font-weight: 700; letter-spacing: .2px; }
 
-/* Chips */
-ion-chip, .mg-chip {
-  --background: #fff6ef;
-  --color: var(--mg-text);
-  border: 1px solid var(--mg-line);
-  border-radius: 16px;
-}
-ion-chip.mg-chip--mint { --background: #effaf7; --color: var(--mg-text); border-color: #e2f5ef; }
-ion-chip.mg-chip--rose { --background: #fff2f6; --color: var(--mg-text); border-color: #ffe5ed; }
-
-/* Inputs y items */
-ion-item.mg-input,
-.mg-input ion-item {
+/* Inputs */
+ion-item.mg-input, .mg-input ion-item {
   --background: var(--mg-surface);
   --border-color: var(--mg-line);
-  --padding-start: 12px;
-  --inner-padding-end: 12px;
   border-radius: 16px;
   border: 1px solid var(--mg-line);
   margin: 6px 0 12px;
-}
-ion-input, ion-textarea {
-  --color: var(--mg-text);
-  caret-color: var(--mg-orange);
-}
-ion-item.mg-input.ion-focus, ion-item.mg-input:hover {
-  border-color: var(--mg-orange-tint);
-  box-shadow: 0 0 0 4px rgba(255,145,77,.08);
 }
 
 /* Tabs */
 ion-tab-bar {
   --background: var(--mg-surface);
-  --color: var(--ion-tab-bar-color);
-  --color-selected: var(--ion-tab-bar-color-selected);
   border-top: 1px solid var(--mg-line);
-}
-ion-tab-button {
-  --ripple-color: rgba(255,145,77,.18);
 }
 
 /* Listas */
-ion-list {
-  background: transparent;
-}
-ion-item {
-  --background: var(--mg-surface);
-  --border-color: var(--mg-line);
-}
+ion-list { background: transparent; }
+ion-item { --background: var(--mg-surface); --border-color: var(--mg-line); }
 
-/* Toasts / Alerts */
-ion-toast {
-  --background: #2e2a27;
-  --color: #fff;
-  --border-radius: 12px;
-}
-ion-alert {
-  --background: var(--mg-surface);
-  --color: var(--mg-text);
-}
-
-/* FAB */
-ion-fab-button {
-  --background: var(--mg-orange);
-  --color: #fff;
-  --box-shadow: var(--mg-shadow);
-}
-
-/* Skeletons */
-ion-skeleton-text {
-  --background: linear-gradient(90deg, #f3eae2 25%, #f7f0ea 37%, #f3eae2 63%);
-}
-
-/* ====== Utilidades ====== */
+/* Utilidades */
 .mg-container { max-width: 960px; margin: 0 auto; }
-.mg-section-title {
-  font-size: 1.1rem; font-weight: 600; color: var(--mg-text);
-  margin: 14px 6px 8px;
-}
-.mg-muted { color: var(--mg-text-muted); }
-.mg-shadow { box-shadow: var(--mg-shadow); }
-.mg-pill { border-radius: 999px; }
-.mg-gap { gap: 12px; }
-.mg-gradient {
-  background: linear-gradient(180deg, rgba(255,145,77,.12), rgba(255,145,77,0) 70%);
-}
+.mg-section-title { font-size: 1.1rem; font-weight: 600; margin: 14px 6px 8px; }
 
-/* Scrollbar web (opcional) */
-*::-webkit-scrollbar { height: 10px; width: 10px; }
-*::-webkit-scrollbar-thumb {
-  background: #eadcd1; border-radius: 20px; border: 2px solid #fff;
-}
+/* Scrollbar estética */
+*::-webkit-scrollbar { height: 6px; width: 6px; }
+*::-webkit-scrollbar-thumb { background: #eadcd1; border-radius: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }
 
-/* Estados de foco accesibles */
-:focus-visible {
-  outline: 3px solid rgba(255,145,77,.45);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
 
-/* Pequeñas animaciones */
-.mg-fade-in { animation: mgFade .25s ease both; }
-@keyframes mgFade {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+
+
+
+ion-tabs, ion-tab-bar {
+  z-index: 10;
 }
-/* FIN DEL ARCHIVO - Sin llaves extra */
