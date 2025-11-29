@@ -35,22 +35,22 @@ export class LoginPage {
 
   constructor(private auth: Auth, private router: Router) {}
 
-  async login() {
-    this.errorMessage = ''; 
+async login() {
+  this.errorMessage = '';
 
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Debés ingresar correo y contraseña.';
-      return;
-    }
-
-    const { data, error } = await this.auth.login(this.email, this.password);
-
-    if (error) {
-      this.errorMessage = 'Correo o contraseña incorrectos.';
-      console.error(error);
-      return;
-    }
-
-    this.router.navigateByUrl('/tabs');
+  if (!this.email || !this.password) {
+    this.errorMessage = 'Debés ingresar correo y contraseña.';
+    return;
   }
+
+  const { data, error } = await this.auth.login(this.email, this.password);
+
+  if (error) {
+    this.errorMessage = 'Correo o contraseña incorrectos.';
+    console.error(error);
+    return;
+  }
+
+  this.router.navigateByUrl('/tabs', { replaceUrl: true });
+}
 }

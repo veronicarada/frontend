@@ -167,6 +167,7 @@ async guardar() {
 
   esFavorita(r: any) { return this.favoritosSet.has(r.id_receta); }
 
+ //1//
   async toggleFavorita(r: any, ev?: Event) {
     if (ev) ev.stopPropagation();
     if (!this.idUsuario) { alert('Logueate para usar favoritos.'); return; }

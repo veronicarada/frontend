@@ -6,30 +6,47 @@ ion-tab-bar {
 
 /* Color general de los iconos/textos */
 ion-tab-button {
-  --color: #7c7c7c; /* gris base */
-  --color-selected: #FF7E5F; /* coral MealGo */
+  --color: #7c7c7c;
+  --color-selected: #FF7E5F;
   font-weight: 600;
 }
 
-/* Hace que los iconos sean un poco más grandes */
+/* Iconos más grandes */
 ion-icon {
   font-size: 22px;
 }
+
 .mg-tabbar {
   --background: #ffffff;
   --color-selected: #ff6b01;
+
   ion-tab-button {
     color: #5c5c5c;
     &.tab-selected {
       color: #e76800;
     }
   }
+
   ion-icon {
     font-size: 22px;
   }
+
   ion-label {
     font-weight: 500;
     font-size: 12px;
   }
 }
 
+/* FIX LAYOUT TABS */
+ion-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-router-outlet {
+  /* Esto permite que el contenido ocupe el espacio restante y scrollee internamente */
+  flex: 1; 
+  display: block;
+  position: relative;
+}

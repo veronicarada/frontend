@@ -103,40 +103,43 @@
   </ion-list>
 
   <!-- Modal: recetas por ingrediente -->
+  
   <ion-modal [isOpen]="modalOpen" (didDismiss)="cerrarModal()">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar class="mg-toolbar">
-          <ion-title>Recetas con {{ ingredienteActual?.nombre }}</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="cerrarModal()"><ion-icon name="close"></ion-icon></ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar class="mg-toolbar">
+        <ion-title>Recetas con {{ ingredienteActual?.nombre }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="cerrarModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
 
-      <ion-content class="ion-padding mg-bg">
-        <ion-spinner *ngIf="loadingRecetas"></ion-spinner>
+    <ion-content class="ion-padding mg-bg">
+      <ion-spinner *ngIf="loadingRecetas"></ion-spinner>
 
-        <ion-list *ngIf="!loadingRecetas && recetasDelIngrediente.length">
-          <ion-item class="mg-recipe-row" button detail="true"
-                    *ngFor="let r of recetasDelIngrediente"
-                    (click)="irADetalleReceta(r)">
-            <ion-label>
-              <h3>{{ r.nombre }}</h3>
-              <p class="micro">
-                {{ r.dificultad || '—' }} ·
-                {{ r.tiempo_preparacion_min ? (r.tiempo_preparacion_min + ' min') : '—' }}
-              </p>
-            </ion-label>
-            <ion-icon name="arrow-forward-circle-outline" slot="end"></ion-icon>
-          </ion-item>
-        </ion-list>
+      <ion-list *ngIf="!loadingRecetas && recetasDelIngrediente.length">
+        <ion-item class="mg-recipe-row" button detail="true"
+                  *ngFor="let r of recetasDelIngrediente"
+                  (click)="irADetalleReceta(r)">
+          <ion-label>
+            <h3>{{ r.nombre }}</h3>
+            <p class="micro">
+              {{ r.dificultad || '—' }} ·
+              {{ r.tiempo_preparacion_min ? (r.tiempo_preparacion_min + ' min') : '—' }}
+            </p>
+          </ion-label>
+          <ion-icon name="arrow-forward-circle-outline" slot="end"></ion-icon>
+        </ion-item>
+      </ion-list>
 
-        <div class="mg-empty" *ngIf="!loadingRecetas && recetasDelIngrediente.length === 0">
-          <ion-icon name="restaurant-outline"></ion-icon>
-          <p>No hay recetas que usen este ingrediente.</p>
-        </div>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+      <div class="mg-empty" *ngIf="!loadingRecetas && recetasDelIngrediente.length === 0">
+        <ion-icon name="restaurant-outline"></ion-icon>
+        <p>No hay recetas que usen este ingrediente.</p>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 </ion-content>

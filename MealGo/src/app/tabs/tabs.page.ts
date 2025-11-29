@@ -33,9 +33,9 @@ import {
 export class TabsPage {
   constructor(private auth: Auth, private router: Router) {}
 
-  async logoutDirect() {
-    await this.auth.logout();
-    this.router.navigateByUrl('/login');
-  }
+ async logoutDirect() {
+  await this.auth.logout();
+  this.router.navigateByUrl('/login', { replaceUrl: true });
+}
 
 }

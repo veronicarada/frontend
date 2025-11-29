@@ -1,7 +1,4 @@
-/* ===== Fondo y header (estilo Recetas) ===== */
-.mg-bg {
-  --background: linear-gradient(180deg, hsl(30, 96%, 80%) 0%, #ffdec2 45%);
-}
+
 .mg-toolbar {
   --background: transparent;
   --border-width: 0;
@@ -115,4 +112,15 @@ ion-card:has(> ion-card-content:only-child) {
   --background: #fff;
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+}
+.real-scroll {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0 8px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.real-scroll::-webkit-scrollbar {
+  display: none; /* Chrome */
 }

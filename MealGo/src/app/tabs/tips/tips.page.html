@@ -21,18 +21,18 @@
     </ion-input>
   </ion-item>
 
-  <!-- 🏷️ Filtros por categoría (chips scrollables) -->
-  <div class="mg-chip-scroll">
-    <ion-chip
-      *ngFor="let cat of categorias"
-      class="mg-chip"
-      [outline]="categoriaSeleccionada !== cat.value"
-      [color]="categoriaSeleccionada === cat.value ? 'primary' : undefined"
-      (click)="onSeleccionCategoria(cat.value)">
-      <span class="mg-chip-emoji">{{ cat.emoji }}</span>
-      <span class="mg-chip-text">{{ cat.text }}</span>
-    </ion-chip>
-  </div>
+  
+<div class="mg-chip-scroll real-scroll">
+  <ion-chip
+    *ngFor="let cat of categorias"
+    class="mg-chip"
+    [outline]="categoriaSeleccionada !== cat.value"
+    [color]="categoriaSeleccionada === cat.value ? 'primary' : undefined"
+    (click)="onSeleccionCategoria(cat.value)">
+    <span class="mg-chip-emoji">{{ cat.emoji }}</span>
+    <span class="mg-chip-text">{{ cat.text }}</span>
+  </ion-chip>
+</div>
 
   <!-- Estado de carga -->
   <ng-container *ngIf="cargando">
@@ -66,7 +66,6 @@
           <ion-card-title class="mg-tip-title">{{ tip.titulo }}</ion-card-title>
         </div>
 
-        <!-- Badge solo si la categoría es válida -->
         <ion-note class="mg-badge" *ngIf="getText(tip.categoria) !== 'Tip'">
           {{ getText(tip.categoria) }}
         </ion-note>
