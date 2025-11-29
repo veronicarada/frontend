@@ -1,4 +1,4 @@
-/*
+/* 
  * App Global CSS - MealGo
  * ----------------------------------------------------------------------------
  */
@@ -26,31 +26,25 @@
 @import '@ionic/angular/css/palettes/dark.system.css';
 
 /* ===========================
-   MealGo Global Styles
+   FIX UNIVERSAL — SCROLL
    =========================== */
 
+/* 🔥 Ajuste correcto para permitir scroll en TODAS las tabs */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-y: auto !important; 
-  overflow-x: hidden;
+  overflow: hidden; /* ESTE es el valor correcto para Ionic */
 }
 
-/* 2. ASEGURAR INTERACCIÓN */
 ion-app {
   height: 100%;
   position: relative;
 }
 
-/* Fuerza que el contenido sea interactuable */
-ion-content {
-  --overflow: auto !important;
-  overflow-y: auto !important;
-  position: relative !important;
-  pointer-events: auto !important;
-}
-
+/* ===========================
+   ESTILOS MEALGO
+   =========================== */
 
 body {
   font-family: var(--ion-font-family);
@@ -58,7 +52,7 @@ body {
   color: var(--ion-text-color);
 }
 
-/* Fondo degradado suave */
+/* Background degradado */
 .mg-bg,
 ion-content.mg-bg {
   --background: radial-gradient(1200px 800px at 90% -10%, rgba(255, 201, 150, 0.14), transparent 60%),
@@ -81,10 +75,12 @@ ion-button {
   --box-shadow: var(--mg-shadow);
   --padding-top: 12px;
   --padding-bottom: 12px;
-  font-weight: 600;
   transition: transform .08s ease;
+  font-weight: 600;
 }
-ion-button:active { transform: scale(0.98); }
+ion-button:active {
+  transform: scale(0.98);
+}
 
 .mg-outline {
   --background: transparent;
@@ -92,23 +88,22 @@ ion-button:active { transform: scale(0.98); }
   --border-color: var(--mg-orange);
   --border-style: solid;
   --border-width: 1.5px;
-  --box-shadow: none;
 }
 
 /* Tarjetas */
 ion-card, .mg-card {
   border-radius: 22px;
-  box-shadow: var(--mg-shadow);
-  border: 1px solid var(--mg-line);
   background: var(--mg-surface);
+  border: 1px solid var(--mg-line);
+  box-shadow: var(--mg-shadow);
 }
 
 /* Inputs */
 ion-item.mg-input, .mg-input ion-item {
   --background: var(--mg-surface);
   --border-color: var(--mg-line);
-  border-radius: 16px;
   border: 1px solid var(--mg-line);
+  border-radius: 16px;
   margin: 6px 0 12px;
 }
 
@@ -116,6 +111,12 @@ ion-item.mg-input, .mg-input ion-item {
 ion-tab-bar {
   --background: var(--mg-surface);
   border-top: 1px solid var(--mg-line);
+}
+
+/* Asegura que la tab-bar NO tape contenido */
+ion-tabs, ion-tab-bar {
+  z-index: 10;
+  position: relative;
 }
 
 /* Listas */
@@ -130,11 +131,3 @@ ion-item { --background: var(--mg-surface); --border-color: var(--mg-line); }
 *::-webkit-scrollbar { height: 6px; width: 6px; }
 *::-webkit-scrollbar-thumb { background: #eadcd1; border-radius: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }
-
-
-
-
-
-ion-tabs, ion-tab-bar {
-  z-index: 10;
-}
