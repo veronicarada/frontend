@@ -46,5 +46,9 @@ export const routes: Routes = [
     }
   ]
 },
-   { path: '**', redirectTo: 'login' }
+   { path: '**', redirectTo: 'login' },
+  {
+    path: 'hola',
+    loadComponent: () => import('./tabs/hola/hola.page').then( m => m.HolaPage)
+  }
 ];

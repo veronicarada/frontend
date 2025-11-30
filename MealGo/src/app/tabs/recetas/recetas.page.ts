@@ -30,7 +30,7 @@ export class RecetasPage implements OnInit {
     addIcons({ heart, heartOutline, timeOutline, star, pencil, trash, search, addCircleOutline });
   }
 
-  // UI
+  // estados de la pantalla al entrar 
   filtro = '';
   verSoloFavoritas = false;
   editando = false;
@@ -45,6 +45,8 @@ export class RecetasPage implements OnInit {
 
   // FORM
   form: any = { id_receta: null, nombre: '', instrucciones: '', tiempo_preparacion_min: null, dificultad: '' };
+ingredientes: any[] = [];
+ingredientesSeleccionados: string[] = [];
 
   async ngOnInit() {
     await this.bootstrap();
@@ -53,7 +55,10 @@ export class RecetasPage implements OnInit {
   async ionViewWillEnter() {
     await this.bootstrap();
   }
-
+private async bootstrap() {
+  try { this.idUsuario = await this.db.getCurrentUsuarioId(); } catch { this.idUsuario = null; }
+  await Promise.all([this.cargarRecetas(), this.cargarFavoritos(), this.cargarIngredientes()]);
+}
 
   // ===== Filtro =====
   onBuscarChange() { this.aplicarFiltro(); }
@@ -76,18 +81,13 @@ export class RecetasPage implements OnInit {
   nuevo() {
     this.form = { id_receta: null, nombre: '', instrucciones: '', tiempo_preparacion_min: null, dificultad: '' };
     this.ingredientesSeleccionados = []; // reset
-    this.editando = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   editar(r: any, ev?: Event) {
-    if (ev) ev.stopPropagation();
     this.form = { ...r };
     this.editando = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   
-
   cancelar() {
     this.editando = false;
     this.form = { id_receta: null, nombre: '', instrucciones: '', tiempo_preparacion_min: null, dificultad: '' };
@@ -141,7 +141,6 @@ async guardar() {
 }
 
   async eliminar(r: any, ev?: Event) {
-    if (ev) ev.stopPropagation();
     if (!confirm(`Eliminar "${r.nombre}"?`)) return;
     try {
       await this.db.deleteBy('receta', 'id_receta', r.id_receta);
@@ -154,7 +153,6 @@ async guardar() {
 
   // ===== Favoritos (necesita id_usuario) =====
   async cargarFavoritos() {
-    this.favoritosSet.clear();
     if (!this.idUsuario) return;
     try {
       const favs = await this.db.selectEq('favoritos', 'id_usuario', this.idUsuario);
@@ -167,9 +165,8 @@ async guardar() {
 
   esFavorita(r: any) { return this.favoritosSet.has(r.id_receta); }
 
- //1//
+ //1 al tocar el icono de corazón//
   async toggleFavorita(r: any, ev?: Event) {
-    if (ev) ev.stopPropagation();
     if (!this.idUsuario) { alert('Logueate para usar favoritos.'); return; }
 
     try {
@@ -189,7 +186,6 @@ async guardar() {
 
   // ===== Calificar 5 (necesita id_usuario) =====
   async calificarCinco(r: any, ev?: Event) {
-    if (ev) ev.stopPropagation();
     if (!this.idUsuario) { alert('Logueate para calificar.'); return; }
     try {
       await this.db.insert('calificaciones', {
@@ -214,17 +210,10 @@ async guardar() {
   chipClase(d: string) {
     const s = (d || '').toLowerCase();
     if (s.includes('fáci') || s.includes('facil')) return 'dif-facil';
-    if (s.includes('media')) return 'dif-media';
+    if (s.includes('media')) return 'dif-media';                          //son clases CSS//
     if (s.includes('difí') || s.includes('dificil')) return 'dif-dificil';
     return 'dif-otra';
   }
-ingredientes: any[] = [];
-ingredientesSeleccionados: string[] = [];
-
-private async bootstrap() {
-  try { this.idUsuario = await this.db.getCurrentUsuarioId(); } catch { this.idUsuario = null; }
-  await Promise.all([this.cargarRecetas(), this.cargarFavoritos(), this.cargarIngredientes()]);
-}
 
 async cargarIngredientes() {
   try {
@@ -237,13 +226,12 @@ async cargarIngredientes() {
 // 1) Nueva carga con join de ingredientes
 async cargarRecetas(event?: any) {
   try {
-    const data = await this.db.getRecetasConIngredientes();
+    const data = await this.db.getRecetasConIngredientes();   //select con incluye tabla intermedia SB//
 
     this.recetas = (data || []).map((r: any) => ({
       ...r,
       ingredientes_nombres: (r.receta_ingrediente || [])
         .map((ri: any) => ri.ingrediente?.nombre)
-        .filter(Boolean)
     }));
   } catch (e: any) {
     console.error('Error cargando recetas', e);

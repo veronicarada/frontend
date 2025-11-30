@@ -1,18 +1,11 @@
 <ion-header>
   <ion-toolbar color="light" class="mg-toolbar">
     <ion-title>Plan de comidas</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="clear">
-        <ion-icon name="heart-outline" slot="start"></ion-icon>
-        Ver favoritos
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding mg-bg">
+<ion-content class="ion-padding safe-bottom">
 
-  <!-- ====== Crear / Editar Plan ====== -->
   <ion-card class="mg-card">
     <ion-card-header>
       <ion-card-title>{{ editPlanId ? 'Editar plan' : 'Nuevo plan' }}</ion-card-title>

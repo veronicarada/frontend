@@ -2,25 +2,37 @@
  * ----------------------------------------------------------------------------
  */
 
+/* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+/* Fuentes */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Ionic Dark Mode */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-/* === FIX SCROLL === */
+/* ===========================
+   FIX UNIVERSAL — SCROLL
+   =========================== */
+
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Necesario para que Ionic gestione el scroll */
+  overflow: hidden; 
 }
 
 ion-app {
@@ -28,20 +40,25 @@ ion-app {
   position: relative;
 }
 
+/* ===========================
+   ESTILOS MEALGO
+   =========================== */
+
 body {
   font-family: var(--ion-font-family);
   background: var(--ion-background-color);
   color: var(--ion-text-color);
 }
 
-/* === FIX FONDO (NUCLEAR) === */
-/* Esto fuerza a que TODAS las páginas usen el color crema liso, 
-   ignorando los degradados antiguos si quedaron por ahí */
+/* 🔴 SOLUCIÓN DEL BLOQUE ROSA:
+   He eliminado el 'radial-gradient(1200px...)' que causaba la superposición.
+   Ahora solo usa el color de fondo plano.
+*/
 .mg-bg,
 ion-content.mg-bg {
-  --background: var(--mg-bg) !important; 
-  background: var(--mg-bg) !important;
-  background-image: none !important;
+  --background: var(--mg-bg);
+  background: var(--mg-bg);
+  background-image: none;
 }
 
 /* Toolbar */
@@ -95,7 +112,7 @@ ion-item.mg-input, .mg-input ion-item {
 ion-tab-bar {
   --background: var(--mg-surface);
   border-top: 1px solid var(--mg-line);
-  z-index: 10;
+  z-index: 10; 
   position: relative;
 }
 
@@ -107,7 +124,7 @@ ion-item { --background: var(--mg-surface); --border-color: var(--mg-line); }
 .mg-container { max-width: 960px; margin: 0 auto; }
 .mg-section-title { font-size: 1.1rem; font-weight: 600; margin: 14px 6px 8px; }
 
-/* Scrollbar */
+/* Scrollbar estética */
 *::-webkit-scrollbar { height: 6px; width: 6px; }
 *::-webkit-scrollbar-thumb { background: #eadcd1; border-radius: 10px; }
 *::-webkit-scrollbar-track { background: transparent; }

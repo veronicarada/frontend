@@ -1,4 +1,3 @@
-// src/app/tabs/plan/plan.page.ts
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,108 +20,69 @@ export class PlanPage implements OnInit {
   private toastCtrl = inject(ToastController);
   private alertCtrl = inject(AlertController);
 
-  // 🔑 Usuario actual
+  // Usuario actual
   userId: string = '';
 
-  // 📋 Listados
+  // Listados
   planes: any[] = [];
   recetas: any[] = [];
 
-  // 🔎 Selección y detalle
+  // Selección y detalle
   selectedPlan: any = null;
   recetasDelPlan: any[] = [];
 
-  // 📝 Form plan (crear/editar)
+  // Form plan (crear/editar)
   planTitulo: string = '';
   planFechaInicio: string = '';
   planFechaFin: string = '';
   editPlanId: string | null = null;
 
-  // ➕ Form agregar receta al plan
+  // Form agregar receta al plan
   nuevaRecetaId: string = '';
   nuevaRecetaTipo: string = 'Desayuno';
   tiposComida = ['Desayuno', 'Almuerzo', 'Merienda', 'Cena', 'Snack'];
 
   async ngOnInit() {
-    await this.cargarUsuario();
-    await this.cargarRecetas();
-    await this.cargarPlanes();
+    const loginExitoso = await this.cargarUsuario();
+    if (loginExitoso) {
+      await this.cargarRecetas();
+      await this.cargarPlanes();
+    }
   }
 
   // ======== Helpers ========
+  
+  // Convierte la fecha larga de Ionic a YYYY-MM-DD para la base de datos
   private toPgDate(value: any): string {
     if (!value) return '';
-    const s = value.toString();
-    if (s.includes('T')) return s.split('T')[0]; // de ISO → 'YYYY-MM-DD'
-    return s.substring(0, 10);                   // seguridad por si viene más largo
+    return value.toString().split('T')[0];
   }
 
   private async toast(msg: string) {
-    const t = await this.toastCtrl.create({ message: msg, duration: 1600, position: 'bottom' });
+    const t = await this.toastCtrl.create({ 
+      message: msg, 
+      duration: 1600, 
+      position: 'bottom' 
+    });
     t.present();
   }
 
-  // helper simple para generar una contraseña dummy
-  private randomString(n = 12) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let s = '';
-    for (let i = 0; i < n; i++) s += chars[Math.floor(Math.random() * chars.length)];
-    return s;
-  }
-
   // ======== Cargas iniciales ========
-  async cargarUsuario() {
+
+  // Lógica simplificada: Solo obtenemos el ID de la sesión de seguridad
+  async cargarUsuario(): Promise<boolean> {
     const session = await this.auth.getCurrentSession();
     const supaUser = session.data.session?.user;
+
     if (!supaUser) {
       await this.toast('Iniciá sesión nuevamente');
       this.userId = '';
-      return;
+      return false;
     }
 
-    const email = supaUser.email || '';
-    if (!email) {
-      await this.toast('No se obtuvo el email del usuario');
-      this.userId = '';
-      return;
-    }
-
-    // 1) Buscar por email en tu tabla pública
-    const { data: found, error: findErr } = await supabase
-      .from('usuario')
-      .select('id_usuario')
-      .eq('email', email)
-      .single();
-
-    if (!findErr && found?.id_usuario) {
-      this.userId = found.id_usuario;
-      return;
-    }
-
-    // 2) Si no existe, lo creo con datos mínimos requeridos
-    const meta = (supaUser as any)?.user_metadata || {};
-    const nombre = meta['full_name'] || meta['name'] || email.split('@')[0];
-    const contraseniaDummy = this.randomString(16);
-
-    const { data: inserted, error: insErr } = await supabase
-      .from('usuario')
-      .insert([{
-        nombre,
-        email,
-        contrasenia: contraseniaDummy,
-        telefono: null
-      }])
-      .select('id_usuario')
-      .single();
-
-    if (insErr || !inserted?.id_usuario) {
-      console.error('crear usuario público', insErr);
-      await this.toast('No se pudo vincular el usuario con la BD');
-      this.userId = '';
-      return;
-    }
-
-    this.userId = inserted.id_usuario;
+    // Asumimos que si está logueado en Auth, ya existe (o existirá) en la tabla pública
+    this.userId = supaUser.id;
+    return true;
   }
 
   async cargarRecetas() {
@@ -153,6 +113,7 @@ export class PlanPage implements OnInit {
   }
 
   // ======== CRUD plan_de_comidas ========
+  
   limpiarFormPlan() {
     this.planTitulo = '';
     this.planFechaInicio = '';
@@ -194,7 +155,9 @@ export class PlanPage implements OnInit {
     this.planTitulo = plan.titulo || '';
     this.planFechaInicio = this.toPgDate(plan.fecha_inicio);
     this.planFechaFin   = this.toPgDate(plan.fecha_fin);
-       setTimeout(() => {
+    
+    // Pequeño truco para mejorar la experiencia de usuario (scroll arriba)
+    setTimeout(() => {
       document.querySelector('ion-input')?.setFocus?.();
       document.querySelector('ion-content')?.scrollToTop?.(300);
     });
@@ -212,6 +175,7 @@ export class PlanPage implements OnInit {
           handler: async () => {
             try {
               await this.db.deleteBy('plan_de_comidas', 'id_plan', plan.id_plan);
+              // Si borro el plan que estoy viendo en detalle, limpio la vista
               if (this.selectedPlan?.id_plan === plan.id_plan) {
                 this.selectedPlan = null;
                 this.recetasDelPlan = [];
@@ -230,6 +194,7 @@ export class PlanPage implements OnInit {
   }
 
   // ======== Detalle: plan_receta ========
+  
   async verDetalle(plan: any) {
     this.selectedPlan = plan;
     await this.cargarRecetasDelPlan(plan.id_plan);
@@ -237,6 +202,7 @@ export class PlanPage implements OnInit {
 
   private async cargarRecetasDelPlan(id_plan: string) {
     try {
+      // JOIN: Traemos datos de la tabla intermedia y el nombre de la receta original
       const { data, error } = await supabase
         .from('plan_receta')
         .select('id_receta, tipo, receta:receta ( nombre )')
@@ -245,10 +211,11 @@ export class PlanPage implements OnInit {
 
       if (error) throw error;
 
+      // Aplanamos el resultado para que sea fácil de mostrar en el HTML
       this.recetasDelPlan = (data || []).map((row: any) => ({
         id_receta: row.id_receta,
         tipo: row.tipo,
-        nombre: row.receta?.[0]?.nombre || row.receta?.nombre || '(sin nombre)',
+        nombre: row.receta?.nombre || '(sin nombre)', // Manejo seguro si se borró la receta
       }));
     } catch (e) {
       console.error('cargarRecetasDelPlan', e);
@@ -268,7 +235,7 @@ export class PlanPage implements OnInit {
 
     try {
       await this.db.insert('plan_receta', payload);
-      this.nuevaRecetaId = '';
+      this.nuevaRecetaId = ''; // Limpio el select
       await this.cargarRecetasDelPlan(this.selectedPlan.id_plan);
       this.toast('Receta agregada');
     } catch (e: any) {
@@ -280,6 +247,7 @@ export class PlanPage implements OnInit {
   async quitarRecetaDelPlan(item: any) {
     if (!this.selectedPlan) return;
     try {
+      // Borrado compuesto: Coincidencia de Plan + Receta + Tipo
       const { error } = await supabase
         .from('plan_receta')
         .delete()
